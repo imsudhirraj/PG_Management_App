@@ -4,6 +4,6 @@ namespace PGManagement.Application.Interfaces;
 
 public interface ITenantRepository
 {
-    Task<int> CreateAsync(CreateTenantRequest request);
+    Task<int> CreateAsync(string userId, CreateTenantRequest request);
     Task<TenantResponse?> GetByUserIdAsync(string userId);
 }

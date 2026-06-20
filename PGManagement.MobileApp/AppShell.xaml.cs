@@ -1,10 +1,11 @@
-﻿namespace PGManagement.MobileApp
+﻿namespace PGManagement.MobileApp;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        Routing.RegisterRoute("HomePage", typeof(Views.HomePage));
+        Routing.RegisterRoute("RegisterPage", typeof(Views.RegisterPage));
     }
 }

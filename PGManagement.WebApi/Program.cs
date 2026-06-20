@@ -44,6 +44,9 @@ builder.Services.AddScoped<ITenantRepository, TenantRepository>();
 builder.Services.AddScoped<IRoomAllocationRepository, RoomAllocationRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IBookingRepository, BookingRepository>();
+builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
+builder.Services.AddScoped<INoticeRepository, NoticeRepository>();
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

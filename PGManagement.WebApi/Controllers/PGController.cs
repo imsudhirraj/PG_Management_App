@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PGManagement.Application.DTOs;
 using PGManagement.Application.Interfaces;
 using PGManagement.Domain.Entities;
+using System.Security.Claims;
 
 namespace PGManagement.WebApi.Controllers;
 
@@ -12,12 +14,15 @@ public class PGController : ControllerBase
     private readonly IPGRepository _pgRepository;
     public PGController(IPGRepository pgRepository) => _pgRepository = pgRepository;
 
+    [Authorize(Roles = "Owner")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePGRequest request)
     {
+        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+
         var pg = new PG
         {
-            OwnerId = request.OwnerId,
+            OwnerId = ownerId,
             Name = request.Name,
             Address = request.Address,
             City = request.City,
@@ -30,6 +35,7 @@ public class PGController : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
     }
 
+    [AllowAnonymous]
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
@@ -37,6 +43,7 @@ public class PGController : ControllerBase
         return pg is null ? NotFound() : Ok(pg);
     }
 
+    [AllowAnonymous]
     [HttpGet("search")]
     public async Task<IActionResult> SearchByLocation(
         [FromQuery] decimal lat, [FromQuery] decimal lng, [FromQuery] double radiusKm = 5)

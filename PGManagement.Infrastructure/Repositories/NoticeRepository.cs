@@ -6,26 +6,26 @@ using System.Data;
 
 namespace PGManagement.Infrastructure.Repositories;
 
-public class TenantRepository : ITenantRepository
+public class NoticeRepository : INoticeRepository
 {
     private readonly IDbConnectionFactory _connectionFactory;
-    public TenantRepository(IDbConnectionFactory connectionFactory) => _connectionFactory = connectionFactory;
+    public NoticeRepository(IDbConnectionFactory connectionFactory) => _connectionFactory = connectionFactory;
 
-    public async Task<int> CreateAsync(string userId, CreateTenantRequest request)
+    public async Task<int> CreateAsync(CreateNoticeRequest request)
     {
         using var connection = _connectionFactory.CreateConnection();
         return await connection.ExecuteScalarAsync<int>(
-            "dbo.sp_Tenant_Insert",
-            new { UserId = userId, request.FullName, request.Phone },
+            "dbo.sp_Notice_Insert",
+            new { request.PGId, request.Title, request.Message },
             commandType: CommandType.StoredProcedure);
     }
 
-    public async Task<TenantResponse?> GetByUserIdAsync(string userId)
+    public async Task<IEnumerable<NoticeResponse>> GetByPGIdAsync(int pgId)
     {
         using var connection = _connectionFactory.CreateConnection();
-        return await connection.QueryFirstOrDefaultAsync<TenantResponse>(
-            "dbo.sp_Tenant_GetByUserId",
-            new { UserId = userId },
+        return await connection.QueryAsync<NoticeResponse>(
+            "dbo.sp_Notice_GetByPGId",
+            new { PGId = pgId },
             commandType: CommandType.StoredProcedure);
     }
 }

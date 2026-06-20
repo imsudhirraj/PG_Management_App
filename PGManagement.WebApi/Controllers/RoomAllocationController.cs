@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PGManagement.Application.DTOs;
 using PGManagement.Application.Exceptions;
 using PGManagement.Application.Interfaces;
@@ -12,6 +13,7 @@ public class RoomAllocationController : ControllerBase
     private readonly IRoomAllocationRepository _allocationRepository;
     public RoomAllocationController(IRoomAllocationRepository allocationRepository) => _allocationRepository = allocationRepository;
 
+    [Authorize(Roles = "Owner")]
     [HttpPost("allocate")]
     public async Task<IActionResult> Allocate([FromBody] AllocateRoomRequest request)
     {
@@ -26,6 +28,7 @@ public class RoomAllocationController : ControllerBase
         }
     }
 
+    [Authorize(Roles = "Owner")]
     [HttpPost("{allocationId}/vacate")]
     public async Task<IActionResult> Vacate(int allocationId)
     {
