@@ -25,11 +25,19 @@ namespace PGManagement.MobileApp
 
             // ViewModels
             builder.Services.AddTransient<LoginViewModel>();
-            //builder.Services.AddTransient<RegisterViewModel>();
+            builder.Services.AddTransient<RegisterViewModel>();
+            builder.Services.AddTransient<PGSearchViewModel>();
+            builder.Services.AddTransient<MyBookingsViewModel>();
+            builder.Services.AddTransient<MyPGsViewModel>();
+            builder.Services.AddTransient<AddPGViewModel>();
 
             // Views
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<PGSearchPage>();
+            builder.Services.AddTransient<MyBookingsPage>();
+            builder.Services.AddTransient<MyPGsPage>();
+            builder.Services.AddTransient<AddPGPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

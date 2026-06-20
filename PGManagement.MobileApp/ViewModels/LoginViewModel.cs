@@ -43,12 +43,16 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task GoToRegisterAsync() => await Shell.Current.GoToAsync("//RegisterPage");
-
+    private async Task GoToRegisterAsync() => await Shell.Current.GoToAsync("RegisterPage"); 
     private async Task NavigateToRoleHomeAsync(string? role)
     {
-        // We'll wire actual role-based shells in the next step.
-        // For now, navigate to a placeholder home route.
-        await Shell.Current.GoToAsync("HomePage");
+        Application.Current!.MainPage = role switch
+        {
+            "Owner" => CreateShell<Views.OwnerShell>(),
+            "Tenant" => CreateShell<Views.TenantShell>(),
+            _ => new AppShell() // fallback, shouldn't normally happen
+        };
     }
+
+    private static T CreateShell<T>() where T : Shell, new() => new T();
 }

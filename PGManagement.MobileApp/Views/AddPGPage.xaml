@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             x:Class="PGManagement.MobileApp.Views.AddPGPage"
+             x:DataType="vm:AddPGViewModel"
+             Title="Add PG">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Entry Placeholder="PG Name" Text="{Binding Name}" />
+            <Entry Placeholder="Address" Text="{Binding Address}" />
+            <Entry Placeholder="City" Text="{Binding City}" />
+            <Editor Placeholder="Description" Text="{Binding Description}" HeightRequest="80" />
+
+            <Button Text="Use Current Location" Command="{Binding UseCurrentLocationCommand}" />
+
+            <Entry Placeholder="Latitude" Text="{Binding Latitude}" Keyboard="Numeric" />
+            <Entry Placeholder="Longitude" Text="{Binding Longitude}" Keyboard="Numeric" />
+
+            <Label Text="{Binding ErrorMessage}" TextColor="Red"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}" />
+
+            <Button Text="Save PG" Command="{Binding SaveCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

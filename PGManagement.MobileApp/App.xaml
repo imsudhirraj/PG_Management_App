@@ -16,6 +16,7 @@
 
             <local:StringNotEmptyConverter x:Key="StringNotEmptyConverter" />
             <local:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+            <local:StatusColorConverter x:Key="StatusColorConverter" />
 
         </ResourceDictionary>
     </Application.Resources>

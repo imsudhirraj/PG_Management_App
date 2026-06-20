@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+             x:Class="PGManagement.MobileApp.Views.PGSearchPage"
+             x:DataType="vm:PGSearchViewModel"
+             Title="Find PGs Near You">
+
+    <Grid RowDefinitions="Auto,Auto,Auto,*" Padding="16" RowSpacing="12">
+
+        <Label Grid.Row="0" Text="Search radius (km)" FontAttributes="Bold" />
+
+        <Slider Grid.Row="1" Minimum="1" Maximum="20" Value="{Binding RadiusKm}" />
+
+        <Button Grid.Row="2" Text="Search Nearby PGs" Command="{Binding SearchNearbyCommand}"
+                IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+
+        <Grid Grid.Row="3">
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"
+                                VerticalOptions="Center" HorizontalOptions="Center" />
+
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,0,0,10" />
+
+            <CollectionView ItemsSource="{Binding Results}" Margin="0,40,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:PGSearchResult">
+                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
+                                <Label Text="{Binding Address}" FontSize="13" TextColor="Gray" />
+                                <HorizontalStackLayout Spacing="16" Margin="0,6,0,0">
+                                    <Label Text="{Binding DistanceKm, StringFormat='{0:F1} km away'}" FontSize="13" />
+                                    <Label Text="{Binding AvailableBeds, StringFormat='{0} beds available'}"
+                                           FontSize="13" TextColor="Green" FontAttributes="Bold" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+    </Grid>
+</ContentPage>

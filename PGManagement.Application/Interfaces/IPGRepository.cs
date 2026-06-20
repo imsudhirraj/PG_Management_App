@@ -8,4 +8,5 @@ public interface IPGRepository
     Task<int> CreateAsync(PG pg);
     Task<PGResponse?> GetByIdAsync(int id);
     Task<IEnumerable<PGSearchResult>> SearchByLocationAsync(decimal lat, decimal lng, double radiusKm);
+    Task<IEnumerable<PG>> GetByOwnerIdAsync(string ownerId);   
 }

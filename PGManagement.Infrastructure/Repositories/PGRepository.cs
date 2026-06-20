@@ -44,4 +44,11 @@ public class PGRepository : IPGRepository
             new { UserLat = lat, UserLong = lng, RadiusKm = radiusKm },
             commandType: System.Data.CommandType.StoredProcedure);
     }
+
+    public async Task<IEnumerable<PG>> GetByOwnerIdAsync(string ownerId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<PG>(
+            "dbo.sp_PG_GetByOwnerId", new { OwnerId = ownerId }, commandType: CommandType.StoredProcedure);
+    }
 }

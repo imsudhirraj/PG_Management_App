@@ -1,8 +1,8 @@
 namespace PGManagement.MobileApp.Views;
 
-public partial class RegisterPage : ContentPage
+public partial class PGSearchPage : ContentPage
 {
-    public RegisterPage(ViewModels.RegisterViewModel vm)
+    public PGSearchPage(ViewModels.PGSearchViewModel vm)
     {
         InitializeComponent();
         BindingContext = vm;

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PGManagement.Application.DTOs;
 using PGManagement.Application.Interfaces;
 using PGManagement.Domain.Entities;
+using System.Data;
 using System.Security.Claims;
 
 namespace PGManagement.WebApi.Controllers;
@@ -50,5 +51,14 @@ public class PGController : ControllerBase
     {
         var results = await _pgRepository.SearchByLocationAsync(lat, lng, radiusKm);
         return Ok(results);
+    }
+
+    [Authorize(Roles = "Owner")]
+    [HttpGet("my-pgs")]
+    public async Task<IActionResult> GetMyPGs()
+    {
+        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var pgs = await _pgRepository.GetByOwnerIdAsync(ownerId);
+        return Ok(pgs);
     }
 }
