@@ -1,0 +1,12 @@
+<Solution>
+  <Project Path="PGManagement.Application.UnitTests/PGManagement.Application.UnitTests.csproj" />
+  <Project Path="PGManagement.Application/PGManagement.Application.csproj" />
+  <Project Path="PGManagement.Domain.UnitTests/PGManagement.Domain.UnitTests.csproj" />
+  <Project Path="PGManagement.Domain/PGManagement.Domain.csproj" />
+  <Project Path="PGManagement.Infrastructure/PGManagement.Infrastructure.csproj" />
+  <Project Path="PGManagement.MobileApp/PGManagement.MobileApp.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+  <Project Path="PGManagement.WebApi.IntegrationTests/PGManagement.WebApi.IntegrationTests.csproj" />
+  <Project Path="PGManagement.WebApi/PGManagement.WebApi.csproj" />
+</Solution>
