@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             x:Class="PGManagement.MobileApp.Views.TenantDetailPage"
+             x:DataType="vm:TenantDetailViewModel"
+             Title="Tenant Details">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Edit" Command="{Binding ToggleEditCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+            <VerticalStackLayout IsVisible="{Binding IsEditing, Converter={StaticResource InvertedBoolConverter}}" Spacing="8">
+                <Label Text="{Binding FullName}" FontSize="22" FontAttributes="Bold" />
+                <Label Text="{Binding Phone}" FontSize="14" TextColor="Gray" />
+                <Label Text="{Binding PgName}" FontSize="14" />
+                <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="14" />
+                <Label Text="{Binding CheckInDate, StringFormat='Checked in: {0:dd MMM yyyy}'}" FontSize="13" TextColor="Gray" />
+                <Label Text="{Binding EmergencyContactName, StringFormat='Emergency Contact: {0}'}" FontSize="13" Margin="0,10,0,0" />
+                <Label Text="{Binding EmergencyContactPhone}" FontSize="13" />
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding IsEditing}" Spacing="10">
+                <Entry Placeholder="Full Name" Text="{Binding FullName}" />
+                <Entry Placeholder="Phone" Text="{Binding Phone}" />
+                <Entry Placeholder="Emergency Contact Name" Text="{Binding EmergencyContactName}" />
+                <Entry Placeholder="Emergency Contact Phone" Text="{Binding EmergencyContactPhone}" />
+                <Button Text="Save Changes" Command="{Binding SaveCommand}" />
+            </VerticalStackLayout>
+
+            <Label Text="{Binding StatusMessage}" TextColor="Red"
+                   IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}" />
+
+            <BoxView HeightRequest="1" Color="LightGray" Margin="0,20,0,10" />
+
+            <Button Text="Checkout Tenant" Command="{Binding CheckoutCommand}" BackgroundColor="IndianRed" TextColor="White" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

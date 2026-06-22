@@ -8,4 +8,6 @@ public interface IBookingRepository
     Task<IEnumerable<BookingResponse>> GetByTenantIdAsync(int tenantId);
     Task<BookingResponse?> GetByIdAsync(int id);
     Task UpdateStatusAsync(int id, string status);
+    Task<IEnumerable<BookingOverviewResponse>> GetByOwnerIdAsync(string ownerId);
+
 }

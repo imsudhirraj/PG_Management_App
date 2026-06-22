@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             x:Class="PGManagement.MobileApp.Views.ProfilePage"
+             x:DataType="vm:ProfileViewModel"
+             Title="Profile">
+
+    <VerticalStackLayout Padding="24" Spacing="14" VerticalOptions="Start">
+        <Label Text="{Binding FullName}" FontSize="22" FontAttributes="Bold" />
+        <Label Text="{Binding Email}" FontSize="14" TextColor="Gray" />
+        <Label Text="{Binding Role}" FontSize="14" TextColor="Gray" />
+
+        <BoxView HeightRequest="1" Color="LightGray" Margin="0,16,0,16" />
+
+        <Button Text="Settings" Command="{Binding GoToSettingsCommand}" />
+        <Button Text="Logout" Command="{Binding LogoutCommand}" BackgroundColor="IndianRed" TextColor="White" />
+    </VerticalStackLayout>
+</ContentPage>

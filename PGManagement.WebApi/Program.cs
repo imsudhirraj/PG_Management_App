@@ -4,6 +4,7 @@ using PGManagement.Application.Interfaces;
 using PGManagement.Infrastructure.Persistence;
 using PGManagement.Infrastructure.Repositories;
 using PGManagement.Infrastructure.Services;
+using PGManagement.WebApi.Services;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Enter: Bearer {your token}"
+        Description = "Enter: Bearer {your token}",
     });
     c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
     {
@@ -33,6 +34,7 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+    //c.OperationFilter<Swashbuckle.AspNetCore.Annotations.AnnotationsOperationFilter>(); 
 });
 
 // Infrastructure registrations
@@ -47,6 +49,11 @@ builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
 builder.Services.AddScoped<INoticeRepository, NoticeRepository>();
+builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
+builder.Services.AddScoped<IKycRepository, KycRepository>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
+builder.Services.AddSingleton<IPaymentRepository, PaymentRepository>();
 
 // JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -76,7 +83,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthentication();   // must come BEFORE UseAuthorization
+app.UseStaticFiles(); 
+app.UseAuthentication();   
 app.UseAuthorization();
 app.MapControllers();
 app.Run();

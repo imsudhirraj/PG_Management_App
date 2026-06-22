@@ -35,4 +35,12 @@ public class RoomAllocationController : ControllerBase
         await _allocationRepository.VacateAsync(allocationId);
         return NoContent();
     }
+
+    [Authorize(Roles = "Owner")]
+    [HttpGet("by-pg/{pgId}")]
+    public async Task<IActionResult> GetByPG(int pgId)
+    {
+        var allocations = await _allocationRepository.GetByPGIdAsync(pgId);
+        return Ok(allocations);
+    }
 }

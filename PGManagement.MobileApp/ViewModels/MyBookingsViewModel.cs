@@ -28,6 +28,9 @@ public partial class MyBookingsViewModel : ObservableObject
 
         try
         {
+            var token = await Microsoft.Maui.Storage.SecureStorage.Default.GetAsync("auth_token");
+            System.Diagnostics.Debug.WriteLine($"Token before my-pgs call: {token ?? "NULL/EMPTY"}");
+
             var results = await _apiService.GetAsync<List<BookingResponse>>("Booking/my-bookings");
             if (results is null || results.Count == 0)
             {

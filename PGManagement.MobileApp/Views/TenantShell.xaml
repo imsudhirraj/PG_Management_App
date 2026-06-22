@@ -9,9 +9,9 @@
         <ShellContent Title="Search PGs" Icon="search.png"
                       ContentTemplate="{DataTemplate views:PGSearchPage}" Route="PGSearchPage" />
         <ShellContent Title="My Bookings" Icon="booking.png"
-                      ContentTemplate="{DataTemplate views:HomePage}" Route="MyBookingsPage" />
+                      ContentTemplate="{DataTemplate views:MyBookingsPage}" Route="MyBookingsPage" />
         <ShellContent Title="Profile" Icon="profile.png"
-                      ContentTemplate="{DataTemplate views:HomePage}" Route="ProfilePage" />
+                      ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
     </TabBar>
 
 </Shell>

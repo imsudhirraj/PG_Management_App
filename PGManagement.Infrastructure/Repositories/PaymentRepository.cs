@@ -4,6 +4,7 @@ using PGManagement.Application.Interfaces;
 using PGManagement.Infrastructure.Persistence;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,13 @@ namespace PGManagement.Infrastructure.Repositories
                 "dbo.sp_Payment_GetByTenantId",
                 new { TenantId = tenantId },
                 commandType: System.Data.CommandType.StoredProcedure);
+        }
+
+        public async Task<IEnumerable<PaymentOverviewResponse>> GetByOwnerIdAsync(string ownerId)
+        {
+            using var connection = _connectionFactory.CreateConnection();
+            return await connection.QueryAsync<PaymentOverviewResponse>(
+                "dbo.sp_Payment_GetByOwnerId", new { OwnerId = ownerId }, commandType: CommandType.StoredProcedure);
         }
     }
 }

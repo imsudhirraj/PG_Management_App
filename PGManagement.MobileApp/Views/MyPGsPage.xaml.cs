@@ -15,4 +15,11 @@ public partial class MyPGsPage : ContentPage
         base.OnAppearing();
         await _vm.LoadMyPGsCommand.ExecuteAsync(null);
     }
+
+    private async void OnPGSelected(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.CurrentSelection.FirstOrDefault() is not Models.PGResponse selected) return;
+        ((CollectionView)sender).SelectedItem = null;
+        await Shell.Current.GoToAsync($"PGDetailPage?id={selected.Id}");
+    }
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             x:Class="PGManagement.MobileApp.Views.DashboardPage"
+             x:DataType="vm:DashboardViewModel"
+             Title="Dashboard">
+
+    <RefreshView Command="{Binding LoadStatsCommand}" IsRefreshing="{Binding IsBusy}">
+        <ScrollView>
+            <VerticalStackLayout Padding="16" Spacing="12">
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="12" ColumnSpacing="12">
+
+                    <Border Grid.Row="0" Grid.Column="0" Padding="16" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Stats.TotalPGs}" FontSize="28" FontAttributes="Bold" />
+                            <Label Text="Total PGs" FontSize="12" TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="0" Grid.Column="1" Padding="16" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Stats.VacantRooms}" FontSize="28" FontAttributes="Bold" TextColor="Green" />
+                            <Label Text="Vacant Rooms" FontSize="12" TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="0" Padding="16" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Stats.ActiveTenants}" FontSize="28" FontAttributes="Bold" />
+                            <Label Text="Active Tenants" FontSize="12" TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="1" Padding="16" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Stats.OccupancyRate, StringFormat='{0}%'}" FontSize="28" FontAttributes="Bold" TextColor="DarkOrange" />
+                            <Label Text="Occupancy Rate" FontSize="12" TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+
+                <Label Text="{Binding StatusMessage}" TextColor="Red"
+                       IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}" />
+
+                <VerticalStackLayout Spacing="10" Margin="0,16,0,0">
+                    <Button Text="Room Allocations" Command="{Binding GoToAllocationsCommand}" />
+                    <Button Text="Payments" Command="{Binding GoToPaymentsCommand}" />
+                    <Button Text="Complaints" Command="{Binding GoToComplaintsCommand}" />
+                    <Button Text="Bookings" Command="{Binding GoToBookingsCommand}" />
+                    <Button Text="Notices" Command="{Binding GoToNoticesCommand}" />
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

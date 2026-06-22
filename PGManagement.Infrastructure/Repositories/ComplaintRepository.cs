@@ -37,4 +37,11 @@ public class ComplaintRepository : IComplaintRepository
             new { Id = id, Status = status },
             commandType: CommandType.StoredProcedure);
     }
+
+    public async Task<IEnumerable<ComplaintOverviewResponse>> GetByOwnerIdAsync(string ownerId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<ComplaintOverviewResponse>(
+            "dbo.sp_Complaint_GetByOwnerId", new { OwnerId = ownerId }, commandType: CommandType.StoredProcedure);
+    }
 }

@@ -28,4 +28,11 @@ public class NoticeRepository : INoticeRepository
             new { PGId = pgId },
             commandType: CommandType.StoredProcedure);
     }
+
+    public async Task<IEnumerable<NoticeOverviewResponse>> GetByOwnerIdAsync(string ownerId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<NoticeOverviewResponse>(
+            "dbo.sp_Notice_GetByOwnerId", new { OwnerId = ownerId }, commandType: CommandType.StoredProcedure);
+    }
 }

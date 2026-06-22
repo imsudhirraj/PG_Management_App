@@ -51,4 +51,13 @@ public class ComplaintController : ControllerBase
         await _complaintRepository.UpdateStatusAsync(id, request.Status);
         return NoContent();
     }
+
+    [Authorize(Roles = "Owner")]
+    [HttpGet("by-owner")]
+    public async Task<IActionResult> GetByOwner()
+    {
+        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var complaints = await _complaintRepository.GetByOwnerIdAsync(ownerId);
+        return Ok(complaints);
+    }
 }

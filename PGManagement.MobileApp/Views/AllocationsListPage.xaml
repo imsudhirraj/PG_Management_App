@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+             x:Class="PGManagement.MobileApp.Views.AllocationsListPage"
+             x:DataType="vm:AllocationsListViewModel"
+             Title="Room Allocations">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="10">
+        <Label Grid.Row="0" Text="Select PG:" FontAttributes="Bold" />
+        <Picker Grid.Row="1" ItemsSource="{Binding MyPGs}" ItemDisplayBinding="{Binding Name}"
+                SelectedItem="{Binding SelectedPG}" />
+
+        <RefreshView Grid.Row="2" Command="{Binding LoadAllocationsCommand}" IsRefreshing="{Binding IsBusy}">
+            <Grid>
+                <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                       HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+
+                <CollectionView ItemsSource="{Binding Allocations}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:AllocationOverviewResponse">
+                            <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="13" TextColor="Gray" />
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="{Binding AllocatedFrom, StringFormat='From {0:dd MMM yyyy}'}" FontSize="12" TextColor="Gray" />
+                                        <Label Text="Active" TextColor="Green" FontAttributes="Bold" FontSize="12"
+                                               IsVisible="{Binding IsActive}" />
+                                        <Label Text="Vacated" TextColor="Gray" FontSize="12"
+                                               IsVisible="{Binding IsActive, Converter={StaticResource InvertedBoolConverter}}" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </RefreshView>
+    </Grid>
+</ContentPage>

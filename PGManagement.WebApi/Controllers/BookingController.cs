@@ -59,4 +59,13 @@ public class BookingController : ControllerBase
         await _bookingRepository.UpdateStatusAsync(id, request.Status);
         return NoContent();
     }
+
+    [Authorize(Roles = "Owner")]
+    [HttpGet("by-owner")]
+    public async Task<IActionResult> GetByOwner()
+    {
+        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var bookings = await _bookingRepository.GetByOwnerIdAsync(ownerId);
+        return Ok(bookings);
+    }
 }

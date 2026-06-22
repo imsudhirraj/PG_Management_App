@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PGManagement.Application.DTOs;
 using PGManagement.Application.Interfaces;
+using System.Security.Claims;
 
 namespace PGManagement.WebApi.Controllers;
 
@@ -25,6 +26,15 @@ public class NoticeController : ControllerBase
     public async Task<IActionResult> GetByPGId(int pgId)
     {
         var notices = await _noticeRepository.GetByPGIdAsync(pgId);
+        return Ok(notices);
+    }
+
+    [Authorize(Roles = "Owner")]
+    [HttpGet("by-owner")]
+    public async Task<IActionResult> GetByOwner()
+    {
+        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var notices = await _noticeRepository.GetByOwnerIdAsync(ownerId);
         return Ok(notices);
     }
 }

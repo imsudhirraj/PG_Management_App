@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PGManagement.Application.DTOs;
 using PGManagement.Application.Interfaces;
+using System.Security.Claims;
 
 namespace PGManagement.WebApi.Controllers
 {
@@ -25,6 +26,15 @@ namespace PGManagement.WebApi.Controllers
                 var payments = await _paymentRepository.GetByTenantIdAsync(tenantId);
                 return Ok(payments);
             }
-      }   
+
+        [Authorize(Roles = "Owner")]
+        [HttpGet("by-owner")]
+        public async Task<IActionResult> GetByOwner()
+        {
+            var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var payments = await _paymentRepository.GetByOwnerIdAsync(ownerId);
+            return Ok(payments);
+        }
+    } 
     
 }

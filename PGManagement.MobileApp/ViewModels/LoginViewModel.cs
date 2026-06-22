@@ -43,15 +43,17 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task GoToRegisterAsync() => await Shell.Current.GoToAsync("RegisterPage"); 
+    private async Task GoToRegisterAsync() => await Shell.Current.GoToAsync("RegisterPage");
     private async Task NavigateToRoleHomeAsync(string? role)
     {
-        Application.Current!.MainPage = role switch
+        var newRoot = role switch
         {
-            "Owner" => CreateShell<Views.OwnerShell>(),
-            "Tenant" => CreateShell<Views.TenantShell>(),
-            _ => new AppShell() // fallback, shouldn't normally happen
+            "Owner" => (Page)new Views.OwnerShell(),
+            "Tenant" => new Views.TenantShell(),
+            _ => new AppShell()
         };
+
+        Application.Current!.Windows[0].Page = newRoot;
     }
 
     private static T CreateShell<T>() where T : Shell, new() => new T();

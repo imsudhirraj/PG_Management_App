@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+             x:Class="PGManagement.MobileApp.Views.TenantListPage"
+             x:DataType="vm:TenantListViewModel"
+             Title="My Tenants">
+
+    <RefreshView Command="{Binding LoadTenantsCommand}" IsRefreshing="{Binding IsBusy}">
+        <Grid Padding="16">
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+
+            <CollectionView ItemsSource="{Binding Tenants}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:TenantWithRoomResponse">
+                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TenantListViewModel}}, Path=GoToTenantDetailCommand}"
+                                                       CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="18" />
+                                <Label Text="{Binding Phone}" FontSize="13" TextColor="Gray" />
+                                <Label Text="{Binding PGName}" FontSize="13" TextColor="Gray" />
+                                <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="13" TextColor="Gray" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </RefreshView>
+</ContentPage>

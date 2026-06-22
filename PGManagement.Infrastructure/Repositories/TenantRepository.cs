@@ -28,4 +28,25 @@ public class TenantRepository : ITenantRepository
             new { UserId = userId },
             commandType: CommandType.StoredProcedure);
     }
+
+    public async Task<IEnumerable<TenantWithRoomResponse>> GetByOwnerIdAsync(string ownerId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<TenantWithRoomResponse>(
+            "dbo.sp_Tenant_GetByOwnerId", new { OwnerId = ownerId }, commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task UpdateAsync(int id, UpdateTenantRequest request)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.ExecuteAsync("dbo.sp_Tenant_Update",
+            new { Id = id, request.FullName, request.Phone, request.EmergencyContactName, request.EmergencyContactPhone },
+            commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task CheckoutAsync(int tenantId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.ExecuteAsync("dbo.sp_Tenant_Checkout", new { TenantId = tenantId }, commandType: CommandType.StoredProcedure);
+    }
 }

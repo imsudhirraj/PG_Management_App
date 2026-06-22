@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+             x:Class="PGManagement.MobileApp.Views.OwnerBookingsPage"
+             x:DataType="vm:OwnerBookingsViewModel"
+             Title="Bookings">
+
+    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}">
+        <Grid Padding="16">
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+
+            <CollectionView ItemsSource="{Binding Bookings}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:BookingOverviewResponse">
+                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                            <VerticalStackLayout Spacing="6">
+                                <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" />
+                                <Label Text="{Binding PGName}" FontSize="13" TextColor="Gray" />
+                                <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="13" TextColor="Gray" />
+                                <HorizontalStackLayout Spacing="10">
+                                    <Label Text="{Binding Status}" FontAttributes="Bold"
+                                           TextColor="{Binding Status, Converter={StaticResource StatusColorConverter}}" />
+                                    <Label Text="{Binding BookingDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="Gray" FontSize="12" />
+                                </HorizontalStackLayout>
+                                <Button Text="Confirm Booking" FontSize="12" HeightRequest="36"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OwnerBookingsViewModel}}, Path=ConfirmBookingCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </RefreshView>
+</ContentPage>

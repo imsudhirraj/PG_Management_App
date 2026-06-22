@@ -28,6 +28,9 @@ public partial class MyPGsViewModel : ObservableObject
 
         try
         {
+            var token = await Microsoft.Maui.Storage.SecureStorage.Default.GetAsync("auth_token");
+            System.Diagnostics.Debug.WriteLine($"Token before my-pgs call: {token ?? "NULL/EMPTY"}");
+
             var results = await _apiService.GetAsync<List<PGResponse>>("PG/my-pgs");
             if (results is null || results.Count == 0)
             {
@@ -48,4 +51,5 @@ public partial class MyPGsViewModel : ObservableObject
 
     [RelayCommand]
     private async Task GoToAddPGAsync() => await Shell.Current.GoToAsync("AddPGPage");
+
 }

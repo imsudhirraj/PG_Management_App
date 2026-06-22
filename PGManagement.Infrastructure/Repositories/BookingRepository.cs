@@ -46,4 +46,11 @@ public class BookingRepository : IBookingRepository
             new { Id = id, Status = status },
             commandType: CommandType.StoredProcedure);
     }
+
+    public async Task<IEnumerable<BookingOverviewResponse>> GetByOwnerIdAsync(string ownerId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<BookingOverviewResponse>(
+            "dbo.sp_Booking_GetByOwnerId", new { OwnerId = ownerId }, commandType: CommandType.StoredProcedure);
+    }
 }

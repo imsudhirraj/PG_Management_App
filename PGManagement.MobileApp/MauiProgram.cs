@@ -30,6 +30,16 @@ namespace PGManagement.MobileApp
             builder.Services.AddTransient<MyBookingsViewModel>();
             builder.Services.AddTransient<MyPGsViewModel>();
             builder.Services.AddTransient<AddPGViewModel>();
+            builder.Services.AddTransient<PGDetailViewModel>();
+            builder.Services.AddTransient<DashboardViewModel>();
+            builder.Services.AddTransient<ProfileViewModel>();
+            builder.Services.AddTransient<TenantListViewModel>();
+            builder.Services.AddTransient<TenantDetailViewModel>(); 
+            builder.Services.AddTransient<AllocationsListViewModel>();
+            builder.Services.AddTransient<OwnerPaymentsViewModel>();
+            builder.Services.AddTransient<OwnerComplaintsViewModel>();
+            builder.Services.AddTransient<OwnerBookingsViewModel>();
+            builder.Services.AddTransient<OwnerNoticesViewModel>();
 
             // Views
             builder.Services.AddTransient<LoginPage>();
@@ -38,6 +48,16 @@ namespace PGManagement.MobileApp
             builder.Services.AddTransient<MyBookingsPage>();
             builder.Services.AddTransient<MyPGsPage>();
             builder.Services.AddTransient<AddPGPage>();
+            builder.Services.AddTransient<PGDetailPage>();
+            builder.Services.AddTransient<DashboardPage>();
+            builder.Services.AddTransient<ProfilePage>();
+            builder.Services.AddTransient<TenantListPage>();
+            builder.Services.AddTransient<TenantDetailPage>();
+            builder.Services.AddTransient<AllocationsListPage>();
+            builder.Services.AddTransient<OwnerPaymentsPage>();
+            builder.Services.AddTransient<OwnerComplaintsPage>();
+            builder.Services.AddTransient<OwnerBookingsPage>();
+            builder.Services.AddTransient<OwnerNoticesPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

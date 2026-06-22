@@ -8,6 +8,20 @@ using System.Security.Claims;
 
 namespace PGManagement.WebApi.Controllers;
 
+
+[ApiController]
+[Route("api/debug")]
+public class DebugController : ControllerBase
+{
+    [Authorize]
+    [HttpGet("claims")]
+    public IActionResult GetMyClaims()
+    {
+        var claims = User.Claims.Select(c => new { c.Type, c.Value });
+        return Ok(claims);
+    }
+}
+
 [ApiController]
 [Route("api/[controller]")]
 public class PGController : ControllerBase
@@ -34,6 +48,22 @@ public class PGController : ControllerBase
 
         var id = await _pgRepository.CreateAsync(pg);
         return CreatedAtAction(nameof(GetById), new { id }, new { id });
+    }
+
+    [Authorize(Roles = "Owner")]
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(int id, [FromBody] CreatePGRequest request)
+    {
+        await _pgRepository.UpdateAsync(id, request);
+        return NoContent();
+    }
+
+    [Authorize(Roles = "Owner")]
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        await _pgRepository.SoftDeleteAsync(id);
+        return NoContent();
     }
 
     [AllowAnonymous]

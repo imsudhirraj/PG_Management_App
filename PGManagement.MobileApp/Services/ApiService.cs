@@ -38,11 +38,31 @@ public class ApiService : IApiService
             string.IsNullOrEmpty(token) ? null : new AuthenticationHeaderValue("Bearer", token);
     }
 
+    //public async Task<TResponse?> GetAsync<TResponse>(string endpoint)
+    //{
+    //    await AttachTokenAsync();
+    //    var response = await _httpClient.GetAsync(endpoint);
+
+    //    if (!response.IsSuccessStatusCode)
+    //    {
+    //        var errorBody = await response.Content.ReadAsStringAsync();
+    //        throw new Exception($"{(int)response.StatusCode} {response.StatusCode}: {errorBody}");
+    //    }
+
+    //    return await response.Content.ReadFromJsonAsync<TResponse>();
+    //}
+
     public async Task<TResponse?> GetAsync<TResponse>(string endpoint)
     {
         await AttachTokenAsync();
         var response = await _httpClient.GetAsync(endpoint);
-        if (!response.IsSuccessStatusCode) return default;
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync();
+            throw new Exception($"{(int)response.StatusCode} {response.StatusCode}: {errorBody}");
+        }
+
         return await response.Content.ReadFromJsonAsync<TResponse>();
     }
 
@@ -58,5 +78,19 @@ public class ApiService : IApiService
     {
         await AttachTokenAsync();
         return await _httpClient.PostAsJsonAsync(endpoint, body);
+    }
+
+    public async Task<bool> PutAsync<TRequest>(string endpoint, TRequest body)
+    {
+        await AttachTokenAsync();
+        var response = await _httpClient.PutAsJsonAsync(endpoint, body);
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<bool> DeleteAsync(string endpoint)
+    {
+        await AttachTokenAsync();
+        var response = await _httpClient.DeleteAsync(endpoint);
+        return response.IsSuccessStatusCode;
     }
 }

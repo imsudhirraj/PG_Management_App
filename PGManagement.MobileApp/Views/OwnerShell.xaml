@@ -6,12 +6,10 @@
        FlyoutBehavior="Disabled">
 
     <TabBar>
-        <ShellContent Title="Dashboard" Icon="dashboard.png"
-                      ContentTemplate="{DataTemplate views:HomePage}" Route="DashboardPage" />
-        <ShellContent Title="My PGs" Icon="building.png"
-                      ContentTemplate="{DataTemplate views:HomePage}" Route="MyPGsPage" />
-        <ShellContent Title="Profile" Icon="profile.png"
-                      ContentTemplate="{DataTemplate views:HomePage}" Route="OwnerProfilePage" />
+        <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate views:DashboardPage}" Route="DashboardPage" />
+        <ShellContent Title="My PGs" ContentTemplate="{DataTemplate views:MyPGsPage}" Route="MyPGsPage" />
+        <ShellContent Title="Tenants" ContentTemplate="{DataTemplate views:TenantListPage}" Route="TenantListPage" />
+        <ShellContent Title="Profile" ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
     </TabBar>
 
 </Shell>
