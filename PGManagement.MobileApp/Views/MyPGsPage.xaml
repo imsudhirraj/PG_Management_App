@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+             x:Class="PGManagement.MobileApp.Views.MyPGsPage"
+             x:DataType="vm:MyPGsViewModel"
+             Title="My PGs">
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="+ Add" Command="{Binding GoToAddPGCommand}" />
+    </ContentPage.ToolbarItems>
+
+    <RefreshView Command="{Binding LoadMyPGsCommand}" IsRefreshing="{Binding IsBusy}">
+        <Grid Padding="16">
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+
+            <CollectionView ItemsSource="{Binding MyPGs}" SelectionMode="Single" SelectionChanged="OnPGSelected">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:PGResponse">
+                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
+                                <Label Text="{Binding Address}" FontSize="13" TextColor="Gray" />
+                                <Label Text="{Binding City}" FontSize="13" TextColor="Gray" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            
+        </Grid>
+    </RefreshView>
+</ContentPage>

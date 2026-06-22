@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+             x:Class="PGManagement.MobileApp.Views.MyBookingsPage"
+             x:DataType="vm:MyBookingsViewModel"
+             Title="My Bookings">
+
+    <RefreshView Command="{Binding LoadBookingsCommand}" IsRefreshing="{Binding IsBusy}">
+        <Grid Padding="16">
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+
+            <CollectionView ItemsSource="{Binding Bookings}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:BookingResponse">
+                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                            <VerticalStackLayout Spacing="4">
+                                <Label Text="{Binding PGName}" FontAttributes="Bold" FontSize="18" />
+                                <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="14" TextColor="Gray" />
+                                <HorizontalStackLayout Spacing="10" Margin="0,6,0,0">
+                                    <Label Text="{Binding Status}" FontAttributes="Bold"
+                                           TextColor="{Binding Status, Converter={StaticResource StatusColorConverter}}" />
+                                    <Label Text="{Binding BookingDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="Gray" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </RefreshView>
+</ContentPage>

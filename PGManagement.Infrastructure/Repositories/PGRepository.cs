@@ -29,6 +29,20 @@ public class PGRepository : IPGRepository
             "dbo.sp_PG_Insert", parameters, commandType: System.Data.CommandType.StoredProcedure);
     }
 
+    public async Task UpdateAsync(int id, CreatePGRequest request)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.ExecuteAsync("dbo.sp_PG_Update",
+            new { Id = id, request.Name, request.Address, request.City, request.Description, request.Latitude, request.Longitude },
+            commandType: CommandType.StoredProcedure);
+    }
+
+    public async Task SoftDeleteAsync(int id)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        await connection.ExecuteAsync("dbo.sp_PG_SoftDelete", new { Id = id }, commandType: CommandType.StoredProcedure);
+    }
+
     public async Task<PGResponse?> GetByIdAsync(int id)
     {
         using var connection = _connectionFactory.CreateConnection();
@@ -43,5 +57,12 @@ public class PGRepository : IPGRepository
             "dbo.sp_PG_SearchByLocation",
             new { UserLat = lat, UserLong = lng, RadiusKm = radiusKm },
             commandType: System.Data.CommandType.StoredProcedure);
+    }
+
+    public async Task<IEnumerable<PG>> GetByOwnerIdAsync(string ownerId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<PG>(
+            "dbo.sp_PG_GetByOwnerId", new { OwnerId = ownerId }, commandType: CommandType.StoredProcedure);
     }
 }

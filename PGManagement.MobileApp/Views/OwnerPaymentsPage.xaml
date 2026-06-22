@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+             x:Class="PGManagement.MobileApp.Views.OwnerPaymentsPage"
+             x:DataType="vm:OwnerPaymentsViewModel"
+             Title="Payments">
+
+    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}">
+        <Grid Padding="16">
+            <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+
+            <CollectionView ItemsSource="{Binding Payments}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:PaymentOverviewResponse">
+                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                    <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" />
+                                    <Label Text="{Binding Type}" FontSize="12" TextColor="Gray" />
+                                    <Label Text="{Binding PaymentDate, StringFormat='{0:dd MMM yyyy}'}" FontSize="12" TextColor="Gray" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1" Text="{Binding Amount, StringFormat='₹{0:N0}'}"
+                                       FontAttributes="Bold" FontSize="18" VerticalOptions="Center" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+    </RefreshView>
+</ContentPage>

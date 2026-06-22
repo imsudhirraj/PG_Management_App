@@ -37,4 +37,11 @@ public class RoomAllocationRepository : IRoomAllocationRepository
             new { AllocationId = allocationId },
             commandType: CommandType.StoredProcedure);
     }
+
+    public async Task<IEnumerable<AllocationOverviewResponse>> GetByPGIdAsync(int pgId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<AllocationOverviewResponse>(
+            "dbo.sp_RoomAllocation_GetByPGId", new { PGId = pgId }, commandType: CommandType.StoredProcedure);
+    }
 }

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             x:Class="PGManagement.MobileApp.Views.RegisterPage"
+             x:DataType="vm:RegisterViewModel"
+             Title="Register">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30" Spacing="16" VerticalOptions="Center">
+
+            <Label Text="Create Account" FontSize="26" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,0,0,10" />
+
+            <Entry Placeholder="Full Name" Text="{Binding FullName}" />
+            <Entry Placeholder="Email" Keyboard="Email" Text="{Binding Email}" />
+            <Entry Placeholder="Password" IsPassword="True" Text="{Binding Password}" />
+
+            <Label Text="I am a:" FontAttributes="Bold" />
+            <Picker ItemsSource="{Binding Roles}" SelectedItem="{Binding SelectedRole}" />
+
+            <Label Text="{Binding ErrorMessage}" TextColor="Red"
+                   IsVisible="{Binding ErrorMessage, Converter={StaticResource StringNotEmptyConverter}}" />
+
+            <Button Text="Register" Command="{Binding RegisterCommand}"
+                    IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}" />
+
+            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" />
+
+            <Button Text="Already have an account? Login" Command="{Binding GoToLoginCommand}"
+                    BackgroundColor="Transparent" TextColor="Gray" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

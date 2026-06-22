@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PGManagement.Application.DTOs;
 using PGManagement.Application.Interfaces;
 
@@ -11,6 +12,7 @@ public class RoomController : ControllerBase
     private readonly IRoomRepository _roomRepository;
     public RoomController(IRoomRepository roomRepository) => _roomRepository = roomRepository;
 
+    [Authorize(Roles = "Owner")]
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateRoomRequest request)
     {
@@ -18,6 +20,7 @@ public class RoomController : ControllerBase
         return CreatedAtAction(nameof(GetByPGId), new { pgId = request.PGId }, new { id });
     }
 
+    [AllowAnonymous]
     [HttpGet("pg/{pgId}")]
     public async Task<IActionResult> GetByPGId(int pgId)
     {
