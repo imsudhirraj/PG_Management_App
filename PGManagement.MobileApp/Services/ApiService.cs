@@ -14,7 +14,15 @@ public class ApiService : IApiService
     // iOS simulator → localhost works directly.
     // Physical device → use your PC's LAN IP (e.g. 192.168.1.50).
     //private const string BaseUrl = "https://10.0.2.2:7259/api/";
+    //private const string BaseUrl = "http://10.0.2.2:5296/api/";
+    //private const string BaseUrl = "https://monalika-001-site1.ftempurl.com/api/";
+   
+    #if DEBUG
     private const string BaseUrl = "http://10.0.2.2:5296/api/";
+    #else
+        private const string BaseUrl = "http://monalika-001-site1.ftempurl.com/api/";
+    #endif
+
     public ApiService(ISecureStorageService secureStorage)
     {
         _secureStorage = secureStorage;

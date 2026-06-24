@@ -73,18 +73,58 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddAuthorization();
 
-var app = builder.Build();
+WebApplication app;
 
-if (app.Environment.IsDevelopment())
+try
 {
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app = builder.Build();
+}
+catch (Exception ex)
+{
+    Console.WriteLine("BUILD ERROR:");
+    Console.WriteLine(ex.ToString());
+    throw;
 }
 
-app.UseHttpsRedirection();
+app.UseExceptionHandler(errorApp =>
+{
+    errorApp.Run(async context =>
+    {
+        var exception = context.Features
+            .Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>();
+
+        context.Response.ContentType = "text/plain";
+
+        await context.Response.WriteAsync(
+            exception?.Error.ToString() ?? "Unknown error");
+    });
+});
+
+//if (app.Environment.IsDevelopment())
+//{
+app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+        c.RoutePrefix = string.Empty; // <--- Setting this to empty serves Swagger at the root URL
+    });
+
+//app.UseSwaggerUI();
+//}
+
+//app.UseHttpsRedirection();
 app.UseStaticFiles(); 
 app.UseAuthentication();   
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+try
+{
+    app.Run();
+}
+catch (Exception ex)
+{
+    Console.WriteLine("RUN ERROR:");
+    Console.WriteLine(ex.ToString());
+    throw;
+}
