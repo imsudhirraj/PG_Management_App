@@ -4,53 +4,79 @@
              xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
              x:Class="PGManagement.MobileApp.Views.DashboardPage"
              x:DataType="vm:DashboardViewModel"
-             Title="Dashboard">
+             Title="Executive Console"
+             BackgroundColor="#F8F9FA">
 
-    <RefreshView Command="{Binding LoadStatsCommand}" IsRefreshing="{Binding IsBusy}">
+    <RefreshView Command="{Binding LoadStatsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
         <ScrollView>
-            <VerticalStackLayout Padding="16" Spacing="12">
+            <VerticalStackLayout Padding="20" Spacing="20">
 
-                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="12" ColumnSpacing="12">
+                <VerticalStackLayout Spacing="2" Margin="0,4,0,10">
+                    <Label Text="Property Analytics" FontSize="14" TextColor="#6C757D" FontAttributes="Bold" CharacterSpacing="1" />
+                    <Label Text="Operations Overview" FontSize="26" FontAttributes="Bold" TextColor="#1A1A1A" />
+                </VerticalStackLayout>
 
-                    <Border Grid.Row="0" Grid.Column="0" Padding="16" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Stats.TotalPGs}" FontSize="28" FontAttributes="Bold" />
-                            <Label Text="Total PGs" FontSize="12" TextColor="Gray" />
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="14" ColumnSpacing="14">
+                    <Border Grid.Row="0" Grid.Column="0" Padding="18" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                        <Border.Shadow>
+                            <Shadow Offset="0,4" Radius="10" Brush="#0A000000" Opacity="0.6"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="{Binding Stats.TotalPGs}" FontSize="32" FontAttributes="Bold" TextColor="#4A154B" />
+                            <Label Text="Managed Estates" FontSize="12" FontAttributes="Bold" TextColor="#8D96A0" />
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="0" Grid.Column="1" Padding="16" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Stats.VacantRooms}" FontSize="28" FontAttributes="Bold" TextColor="Green" />
-                            <Label Text="Vacant Rooms" FontSize="12" TextColor="Gray" />
+                    <Border Grid.Row="0" Grid.Column="1" Padding="18" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                        <Border.Shadow>
+                            <Shadow Offset="0,4" Radius="10" Brush="#0A000000" Opacity="0.6"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="{Binding Stats.VacantRooms}" FontSize="32" FontAttributes="Bold" TextColor="#2ECC71" />
+                            <Label Text="Available Spaces" FontSize="12" FontAttributes="Bold" TextColor="#8D96A0" />
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="1" Grid.Column="0" Padding="16" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Stats.ActiveTenants}" FontSize="28" FontAttributes="Bold" />
-                            <Label Text="Active Tenants" FontSize="12" TextColor="Gray" />
+                    <Border Grid.Row="1" Grid.Column="0" Padding="18" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                        <Border.Shadow>
+                            <Shadow Offset="0,4" Radius="10" Brush="#0A000000" Opacity="0.6"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="{Binding Stats.ActiveTenants}" FontSize="32" FontAttributes="Bold" TextColor="#512BD4" />
+                            <Label Text="Verified Tenants" FontSize="12" FontAttributes="Bold" TextColor="#8D96A0" />
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="1" Grid.Column="1" Padding="16" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                        <VerticalStackLayout>
-                            <Label Text="{Binding Stats.OccupancyRate, StringFormat='{0}%'}" FontSize="28" FontAttributes="Bold" TextColor="DarkOrange" />
-                            <Label Text="Occupancy Rate" FontSize="12" TextColor="Gray" />
+                    <Border Grid.Row="1" Grid.Column="1" Padding="18" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                        <Border.Shadow>
+                            <Shadow Offset="0,4" Radius="10" Brush="#0A000000" Opacity="0.6"/>
+                        </Border.Shadow>
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="{Binding Stats.OccupancyRate, StringFormat='{0}%'}" FontSize="32" FontAttributes="Bold" TextColor="#E67E22" />
+                            <Label Text="Capacity Yield" FontSize="12" FontAttributes="Bold" TextColor="#8D96A0" />
                         </VerticalStackLayout>
                     </Border>
-
                 </Grid>
 
-                <Label Text="{Binding StatusMessage}" TextColor="Red"
+                <Label Text="{Binding StatusMessage}" TextColor="#E74C3C" FontSize="13" FontAttributes="Italic" HorizontalTextAlignment="Center"
                        IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}" />
 
-                <VerticalStackLayout Spacing="10" Margin="0,16,0,0">
-                    <Button Text="Room Allocations" Command="{Binding GoToAllocationsCommand}" />
-                    <Button Text="Payments" Command="{Binding GoToPaymentsCommand}" />
-                    <Button Text="Complaints" Command="{Binding GoToComplaintsCommand}" />
-                    <Button Text="Bookings" Command="{Binding GoToBookingsCommand}" />
-                    <Button Text="Notices" Command="{Binding GoToNoticesCommand}" />
+                <VerticalStackLayout Spacing="12" Margin="0,10,0,0">
+                    <Label Text="Management Suites" FontSize="13" FontAttributes="Bold" TextColor="#6C757D" CharacterSpacing="1" Margin="2,0,0,4"/>
+
+                    <Button Text="Space Assignment" Command="{Binding GoToAllocationsCommand}" BackgroundColor="White" TextColor="#4A154B" CornerRadius="12" HeightRequest="52" FontAttributes="Bold" FontSize="15"/>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Button Grid.Column="0" Text="Occupant Registry" Command="{Binding GoToTenantCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
+                        <Button Grid.Column="1" Text="Reservations" Command="{Binding GoToBookingsCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <Button Grid.Column="0" Text="Revenue Hub" Command="{Binding GoToPaymentsCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
+                        <Button Grid.Column="1" Text="Resolution Center" Command="{Binding GoToComplaintsCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
+                    </Grid>
+
+                    <Button Text="Broadcast Bulletin" Command="{Binding GoToNoticesCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="52" FontAttributes="Bold" FontSize="15"/>
                 </VerticalStackLayout>
 
             </VerticalStackLayout>

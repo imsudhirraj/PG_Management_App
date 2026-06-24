@@ -28,3 +28,10 @@ public class UpdateTenantRequest
     public string? EmergencyContactName { get; set; }
     public string? EmergencyContactPhone { get; set; }
 }
+
+public class UnallocatedTenantResponse
+{
+    public int Id { get; set; }
+    public string FullName { get; set; } = string.Empty;
+    public string Phone { get; set; } = string.Empty;
+}

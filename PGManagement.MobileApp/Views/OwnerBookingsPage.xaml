@@ -5,29 +5,42 @@
              xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
              x:Class="PGManagement.MobileApp.Views.OwnerBookingsPage"
              x:DataType="vm:OwnerBookingsViewModel"
-             Title="Bookings">
+             Title="Incoming Reservations"
+             BackgroundColor="#F8F9FA">
 
-    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}">
-        <Grid Padding="16">
+    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
+        <Grid Padding="20">
             <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" TextColor="#A0AEC0" FontAttributes="Italic" />
 
             <CollectionView ItemsSource="{Binding Bookings}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:BookingOverviewResponse">
-                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                            <VerticalStackLayout Spacing="6">
-                                <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" />
-                                <Label Text="{Binding PGName}" FontSize="13" TextColor="Gray" />
-                                <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="13" TextColor="Gray" />
-                                <HorizontalStackLayout Spacing="10">
-                                    <Label Text="{Binding Status}" FontAttributes="Bold"
-                                           TextColor="{Binding Status, Converter={StaticResource StatusColorConverter}}" />
-                                    <Label Text="{Binding BookingDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="Gray" FontSize="12" />
-                                </HorizontalStackLayout>
-                                <Button Text="Confirm Booking" FontSize="12" HeightRequest="36"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OwnerBookingsViewModel}}, Path=ConfirmBookingCommand}"
-                                        CommandParameter="{Binding .}" />
+                        <Border Margin="0,0,0,14" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                            <Border.Shadow>
+                                <Shadow Offset="0,3" Radius="8" Brush="#0A000000" Opacity="0.4"/>
+                            </Border.Shadow>
+
+                            <VerticalStackLayout Spacing="12">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                        <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="17" TextColor="#1A1A1A" />
+                                        <Label Text="{Binding PGName}" FontSize="13" TextColor="#718096" />
+                                    </VerticalStackLayout>
+
+                                    <Border Grid.Column="1" Padding="10,4" StrokeShape="RoundRectangle 12" StrokeThickness="0" BackgroundColor="#F8F9FA" VerticalOptions="Start">
+                                        <Label Text="{Binding Status}" FontAttributes="Bold" FontSize="11" CharacterSpacing="0.5"
+                                               TextColor="{Binding Status, Converter={StaticResource StatusColorConverter}}" />
+                                    </Border>
+                                </Grid>
+
+                                <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" BackgroundColor="#F7FAFC" Padding="10,6">
+                                    <Label Grid.Column="0" Text="{Binding RoomNumber, StringFormat='Target Allocation: Room {0}'}" FontSize="12" FontAttributes="Bold" TextColor="#4A154B" VerticalOptions="Center"/>
+                                    <Label Grid.Column="1" Text="{Binding BookingDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="#A0AEC0" FontSize="11" VerticalOptions="Center" />
+                                </Grid>
+
+                                <Button Text="Authorize Admission" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OwnerBookingsViewModel}}, Path=ConfirmBookingCommand}" CommandParameter="{Binding .}"
+                                        BackgroundColor="#512BD4" TextColor="White" HeightRequest="40" CornerRadius="8" FontAttributes="Bold" FontSize="13" />
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>

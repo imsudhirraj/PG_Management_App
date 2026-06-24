@@ -7,5 +7,6 @@ public partial class AppShell : Shell
         InitializeComponent();
         Routing.RegisterRoute("HomePage", typeof(Views.HomePage));
         Routing.RegisterRoute("RegisterPage", typeof(Views.RegisterPage));
+        Routing.RegisterRoute("TenantListPage", typeof(Views.TenantListPage));
     }
 }

@@ -13,15 +13,14 @@ public class ApiService : IApiService
     // Android emulator → use 10.0.2.2 to reach your dev machine's localhost.
     // iOS simulator → localhost works directly.
     // Physical device → use your PC's LAN IP (e.g. 192.168.1.50).
-    //private const string BaseUrl = "https://10.0.2.2:7259/api/";
+
+    //#if DEBUG
     //private const string BaseUrl = "http://10.0.2.2:5296/api/";
-    //private const string BaseUrl = "https://monalika-001-site1.ftempurl.com/api/";
-   
-    #if DEBUG
-    private const string BaseUrl = "http://10.0.2.2:5296/api/";
-    #else
-        private const string BaseUrl = "http://monalika-001-site1.ftempurl.com/api/";
-    #endif
+    //#else
+    //private const string BaseUrl = "http://monalika-001-site1.ftempurl.com/api/";
+    //#endif
+
+    private const string BaseUrl = "http://monalika-001-site1.ftempurl.com/api/";
 
     public ApiService(ISecureStorageService secureStorage)
     {
@@ -45,20 +44,6 @@ public class ApiService : IApiService
         _httpClient.DefaultRequestHeaders.Authorization =
             string.IsNullOrEmpty(token) ? null : new AuthenticationHeaderValue("Bearer", token);
     }
-
-    //public async Task<TResponse?> GetAsync<TResponse>(string endpoint)
-    //{
-    //    await AttachTokenAsync();
-    //    var response = await _httpClient.GetAsync(endpoint);
-
-    //    if (!response.IsSuccessStatusCode)
-    //    {
-    //        var errorBody = await response.Content.ReadAsStringAsync();
-    //        throw new Exception($"{(int)response.StatusCode} {response.StatusCode}: {errorBody}");
-    //    }
-
-    //    return await response.Content.ReadFromJsonAsync<TResponse>();
-    //}
 
     public async Task<TResponse?> GetAsync<TResponse>(string endpoint)
     {
@@ -100,5 +85,12 @@ public class ApiService : IApiService
         await AttachTokenAsync();
         var response = await _httpClient.DeleteAsync(endpoint);
         return response.IsSuccessStatusCode;
+    }
+
+    public async Task<HttpResponseMessage> PostEmptyBodyAsync(string endpoint)
+    {
+        await AttachTokenAsync();
+        // Sends a POST request with an empty string content to match the backend expectation
+        return await _httpClient.PostAsync(endpoint, null);
     }
 }

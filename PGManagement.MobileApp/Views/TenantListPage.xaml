@@ -5,27 +5,40 @@
              xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
              x:Class="PGManagement.MobileApp.Views.TenantListPage"
              x:DataType="vm:TenantListViewModel"
-             Title="My Tenants">
+             Title="Occupant Registry"
+             BackgroundColor="#F8F9FA">
 
-    <RefreshView Command="{Binding LoadTenantsCommand}" IsRefreshing="{Binding IsBusy}">
-        <Grid Padding="16">
+    <RefreshView Command="{Binding LoadTenantsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
+        <Grid Padding="20">
             <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" TextColor="#A0AEC0" FontAttributes="Italic" />
 
             <CollectionView ItemsSource="{Binding Tenants}" SelectionMode="None">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:TenantWithRoomResponse">
-                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
+                        <Border Margin="0,0,0,12" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                            <Border.Shadow>
+                                <Shadow Offset="0,2" Radius="6" Brush="#0A000000" Opacity="0.4"/>
+                            </Border.Shadow>
                             <Border.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TenantListViewModel}}, Path=GoToTenantDetailCommand}"
-                                                       CommandParameter="{Binding .}" />
+                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TenantListViewModel}}, Path=GoToTenantDetailCommand}" CommandParameter="{Binding .}" />
                             </Border.GestureRecognizers>
-                            <VerticalStackLayout Spacing="4">
-                                <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="18" />
-                                <Label Text="{Binding Phone}" FontSize="13" TextColor="Gray" />
-                                <Label Text="{Binding PGName}" FontSize="13" TextColor="Gray" />
-                                <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="13" TextColor="Gray" />
-                            </VerticalStackLayout>
+
+                            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                    <Label Text="{Binding FullName}" FontAttributes="Bold" FontSize="17" TextColor="#1A1A1A" />
+
+                                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                        <Label Text="{Binding Phone}" FontSize="12" TextColor="#718096" VerticalOptions="Center" />
+                                        <BoxView WidthRequest="4" HeightRequest="4" Color="#CBD5E0" CornerRadius="2" VerticalOptions="Center"/>
+                                        <Label Text="{Binding PGName}" FontSize="12" TextColor="#4A5568" FontAttributes="Bold" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+
+                                <Border Grid.Column="1" BackgroundColor="#F0EDFA" Padding="12,6" StrokeShape="RoundRectangle 8" StrokeThickness="0" VerticalOptions="Center">
+                                    <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="11" FontAttributes="Bold" TextColor="#512BD4" CharacterSpacing="0.5"/>
+                                </Border>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

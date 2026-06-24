@@ -13,4 +13,5 @@ public interface IApiService
     Task<HttpResponseMessage> PostRawAsync<TRequest>(string endpoint, TRequest body);
     Task<bool> PutAsync<TRequest>(string endpoint, TRequest body);
     Task<bool> DeleteAsync(string endpoint);
+    Task<HttpResponseMessage> PostEmptyBodyAsync(string endpoint);
 }

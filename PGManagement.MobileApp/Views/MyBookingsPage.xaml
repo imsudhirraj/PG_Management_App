@@ -5,26 +5,40 @@
              xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
              x:Class="PGManagement.MobileApp.Views.MyBookingsPage"
              x:DataType="vm:MyBookingsViewModel"
-             Title="My Bookings">
+             Title="My Reservations"
+             BackgroundColor="#F8F9FA">
 
-    <RefreshView Command="{Binding LoadBookingsCommand}" IsRefreshing="{Binding IsBusy}">
-        <Grid Padding="16">
+    <RefreshView Command="{Binding LoadBookingsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
+        <Grid Padding="20">
             <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" TextColor="#A0AEC0" FontAttributes="Italic" />
 
             <CollectionView ItemsSource="{Binding Bookings}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:BookingResponse">
-                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                            <VerticalStackLayout Spacing="4">
-                                <Label Text="{Binding PGName}" FontAttributes="Bold" FontSize="18" />
-                                <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="14" TextColor="Gray" />
-                                <HorizontalStackLayout Spacing="10" Margin="0,6,0,0">
-                                    <Label Text="{Binding Status}" FontAttributes="Bold"
+                        <Border Margin="0,0,0,12" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                            <Border.Shadow>
+                                <Shadow Offset="0,2" Radius="6" Brush="#0A000000" Opacity="0.4"/>
+                            </Border.Shadow>
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                    <Label Text="{Binding PGName}" FontAttributes="Bold" FontSize="17" TextColor="#1A1A1A" />
+
+                                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                        <Border BackgroundColor="#EDF2F7" Padding="8,4" StrokeShape="RoundRectangle 6" StrokeThickness="0">
+                                            <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="12" FontAttributes="Bold" TextColor="#4A154B" />
+                                        </Border>
+                                        <Label Text="{Binding BookingDate, StringFormat='Reserved: {0:dd MMM yyyy}'}" FontSize="12" TextColor="#718096" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+
+                                <!-- Premium Dynamic Status Pill Container -->
+                                <Border Grid.Column="1" Padding="12,6" StrokeShape="RoundRectangle 20" StrokeThickness="0" BackgroundColor="#F8F9FA" VerticalOptions="Center">
+                                    <Label Text="{Binding Status}" FontAttributes="Bold" FontSize="11" CharacterSpacing="0.5" HorizontalOptions="Center" VerticalOptions="Center"
                                            TextColor="{Binding Status, Converter={StaticResource StatusColorConverter}}" />
-                                    <Label Text="{Binding BookingDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="Gray" />
-                                </HorizontalStackLayout>
-                            </VerticalStackLayout>
+                                </Border>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

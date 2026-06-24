@@ -38,4 +38,5 @@ public partial class DashboardViewModel : ObservableObject
     [RelayCommand] private async Task GoToComplaintsAsync() => await Shell.Current.GoToAsync("OwnerComplaintsPage");
     [RelayCommand] private async Task GoToBookingsAsync() => await Shell.Current.GoToAsync("OwnerBookingsPage");
     [RelayCommand] private async Task GoToNoticesAsync() => await Shell.Current.GoToAsync("OwnerNoticesPage");
+    [RelayCommand] private async Task GoToTenantAsync() => await Shell.Current.GoToAsync("TenantListPage");
 }

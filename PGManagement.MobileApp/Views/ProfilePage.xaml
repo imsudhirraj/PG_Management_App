@@ -4,16 +4,41 @@
              xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
              x:Class="PGManagement.MobileApp.Views.ProfilePage"
              x:DataType="vm:ProfileViewModel"
-             Title="Profile">
+             Title="Identity System"
+             BackgroundColor="#F8F9FA">
 
-    <VerticalStackLayout Padding="24" Spacing="14" VerticalOptions="Start">
-        <Label Text="{Binding FullName}" FontSize="22" FontAttributes="Bold" />
-        <Label Text="{Binding Email}" FontSize="14" TextColor="Gray" />
-        <Label Text="{Binding Role}" FontSize="14" TextColor="Gray" />
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="20" VerticalOptions="Start">
 
-        <BoxView HeightRequest="1" Color="LightGray" Margin="0,16,0,16" />
+            <Border Padding="20" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="#4A154B">
+                <Border.Shadow>
+                    <Shadow Offset="0,4" Radius="12" Brush="#1A000000" Opacity="0.6"/>
+                </Border.Shadow>
 
-        <Button Text="Settings" Command="{Binding GoToSettingsCommand}" />
-        <Button Text="Logout" Command="{Binding LogoutCommand}" BackgroundColor="IndianRed" TextColor="White" />
-    </VerticalStackLayout>
+                <VerticalStackLayout Spacing="6" HorizontalOptions="Center" Padding="0,10">
+                    <Label Text="{Binding FullName}" FontSize="24" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center" />
+
+                    <Border BackgroundColor="#350E36" Padding="10,4" StrokeShape="RoundRectangle 12" StrokeThickness="0" HorizontalOptions="Center" Margin="0,4,0,0">
+                        <Label Text="{Binding Role, StringFormat='SYSTEM PROFILE: {0}'}" FontSize="11" FontAttributes="Bold" TextColor="#F8F9FA" CharacterSpacing="0.5" />
+                    </Border>
+
+                    <Label Text="{Binding Email}" FontSize="13" TextColor="#D6C1D7" HorizontalOptions="Center" Margin="0,2,0,0"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Label Text="Account Preferences" FontSize="12" FontAttributes="Bold" TextColor="#6C757D" CharacterSpacing="1" Margin="4,8,0,0" />
+
+            <Border Padding="4,0" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                <Border.Shadow>
+                    <Shadow Offset="0,2" Radius="6" Brush="#0A000000" Opacity="0.4"/>
+                </Border.Shadow>
+                <VerticalStackLayout>
+                    <Button Text="⚙️ Core Application Settings" Command="{Binding GoToSettingsCommand}" BackgroundColor="Transparent" TextColor="#2D3748" HorizontalOptions="Fill" HeightRequest="54" FontAttributes="Bold" FontSize="14" Padding="16,0"/>
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Terminate Authentication Session" Command="{Binding LogoutCommand}" BackgroundColor="#E74C3C" TextColor="White" HeightRequest="52" CornerRadius="12" FontAttributes="Bold" FontSize="15" Margin="0,16,0,0"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

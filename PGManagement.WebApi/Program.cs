@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using PGManagement.Application.Interfaces;
 using PGManagement.Infrastructure.Persistence;
 using PGManagement.Infrastructure.Repositories;
@@ -9,53 +10,70 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Controllers
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "PG Management API",
+        Version = "v1"
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Name = "Authorization",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.ApiKey,
         Scheme = "Bearer",
         BearerFormat = "JWT",
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Enter: Bearer {your token}",
+        In = ParameterLocation.Header,
+        Description = "Enter: Bearer {your JWT token}"
     });
-    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            new OpenApiSecurityScheme
             {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                { Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme, Id = "Bearer" }
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
             },
             Array.Empty<string>()
         }
     });
-    //c.OperationFilter<Swashbuckle.AspNetCore.Annotations.AnnotationsOperationFilter>(); 
 });
 
-// Infrastructure registrations
+// Database
 builder.Services.AddSingleton<IDbConnectionFactory>(_ =>
-    new DbConnectionFactory(builder.Configuration.GetConnectionString("DefaultConnection")!));
+    new DbConnectionFactory(
+        builder.Configuration.GetConnectionString("DefaultConnection")!));
+
+// Repositories
 builder.Services.AddScoped<IPGRepository, PGRepository>();
 builder.Services.AddScoped<IRoomRepository, RoomRepository>();
 builder.Services.AddScoped<ITenantRepository, TenantRepository>();
 builder.Services.AddScoped<IRoomAllocationRepository, RoomAllocationRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
 builder.Services.AddScoped<INoticeRepository, NoticeRepository>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IKycRepository, KycRepository>();
-builder.Services.AddHttpContextAccessor();
+
+// Services
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddSingleton<IFileStorageService, FileStorageService>();
 builder.Services.AddSingleton<IPaymentRepository, PaymentRepository>();
 
-// JWT Authentication
+builder.Services.AddHttpContextAccessor();
+
+// JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -71,21 +89,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
     });
+
 builder.Services.AddAuthorization();
 
-WebApplication app;
+var app = builder.Build();
 
-try
-{
-    app = builder.Build();
-}
-catch (Exception ex)
-{
-    Console.WriteLine("BUILD ERROR:");
-    Console.WriteLine(ex.ToString());
-    throw;
-}
-
+// Global Exception Handler
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
@@ -100,31 +109,22 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
-//if (app.Environment.IsDevelopment())
-//{
-app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-        c.RoutePrefix = string.Empty; // <--- Setting this to empty serves Swagger at the root URL
-    });
+// Swagger
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PG Management API V1");
+});
 
-//app.UseSwaggerUI();
-//}
+// Middleware
+app.UseStaticFiles();
 
-//app.UseHttpsRedirection();
-app.UseStaticFiles(); 
-app.UseAuthentication();   
+// Uncomment if HTTPS is configured
+// app.UseHttpsRedirection();
+
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
-try
-{
-    app.Run();
-}
-catch (Exception ex)
-{
-    Console.WriteLine("RUN ERROR:");
-    Console.WriteLine(ex.ToString());
-    throw;
-}
+
+app.Run();
