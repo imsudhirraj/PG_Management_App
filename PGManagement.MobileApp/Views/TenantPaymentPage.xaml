@@ -43,7 +43,7 @@
 
             <Frame
                 CornerRadius="16"
-                BorderColor="#E5E7EB"
+                BorderColor="LightGrey"
                 Padding="18">
 
                 <VerticalStackLayout Spacing="12">
@@ -97,7 +97,7 @@
 
             <Frame
                 CornerRadius="16"
-                BorderColor="#E5E7EB"
+                BorderColor="LightGrey"
                 Padding="18">
 
                 <VerticalStackLayout Spacing="12">

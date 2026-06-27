@@ -2,7 +2,6 @@
 using PGManagement.MobileApp.Services;
 using PGManagement.MobileApp.ViewModels;
 using PGManagement.MobileApp.Views;
-using SkiaSharp.Views.Maui.Controls.Hosting; // Crucial for .UseSkiaSharp()
 
 namespace PGManagement.MobileApp
 {
@@ -13,7 +12,6 @@ namespace PGManagement.MobileApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
-                .UseSkiaSharp() // Registers the underlying animation engine cleanly
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -48,9 +46,10 @@ namespace PGManagement.MobileApp
             builder.Services.AddTransient<TenantKycViewModel>();
             builder.Services.AddTransient<OwnerPaymentSettingsViewModel>();
             builder.Services.AddTransient<TenantPaymentViewModel>();
+            builder.Services.AddTransient<OwnerRevenueViewModel>();
+
 
             // Views
-            builder.Services.AddTransient<SplashPage>(); // Registered for DI matching tracking
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<PGSearchPage>();
@@ -72,6 +71,7 @@ namespace PGManagement.MobileApp
             builder.Services.AddTransient<TenantKycPage>();
             builder.Services.AddTransient<OwnerPaymentSettingsPage>();
             builder.Services.AddTransient<TenantPaymentPage>();
+            builder.Services.AddTransient<OwnerRevenuePage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

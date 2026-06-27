@@ -99,7 +99,7 @@
                     </Grid>
 
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                        <Button Grid.Column="0" Text="Revenue Hub" Command="{Binding GoToPaymentsCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
+                        <Button Grid.Column="0" Text="Revenue Hub" Command="{Binding GoToRevenueCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
                         <Button Grid.Column="1" Text="Resolution Center" Command="{Binding GoToComplaintsCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
                     </Grid>
 

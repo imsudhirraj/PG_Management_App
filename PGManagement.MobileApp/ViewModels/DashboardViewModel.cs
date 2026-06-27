@@ -50,4 +50,9 @@ public partial class DashboardViewModel : ObservableObject
     {
         await Shell.Current.GoToAsync(nameof(OwnerPaymentSettingsPage));
     }
+    [RelayCommand]
+    private async Task GoToRevenueAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(OwnerRevenuePage));
+    }
 }

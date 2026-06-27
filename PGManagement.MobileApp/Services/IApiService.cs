@@ -30,4 +30,9 @@ public interface IApiService
         string paymentMethod,
         Stream screenshot,
         string fileName);
+    Task<List<PaymentOverviewResponse>?> GetOwnerPaymentsAsync();
+
+    Task<bool> VerifyPaymentAsync(
+        int paymentId,
+        VerifyPaymentRequest request);
 }

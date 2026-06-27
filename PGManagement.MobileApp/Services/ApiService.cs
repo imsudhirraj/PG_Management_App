@@ -211,4 +211,57 @@ public class ApiService : IApiService
 
         return response.IsSuccessStatusCode;
     }
+
+    public async Task<List<PaymentOverviewResponse>?> GetOwnerPaymentsAsync()
+    {
+        await AttachTokenAsync();
+
+        var endpoint = "Payment/by-owner";
+
+        var response = await _httpClient.GetAsync(endpoint);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+
+            throw new Exception(
+                $"GET {endpoint}\n\n" +
+                $"Status : {(int)response.StatusCode}\n\n" +
+                error);
+        }
+
+        return await response.Content.ReadFromJsonAsync<List<PaymentOverviewResponse>>();
+    }
+
+    public async Task<bool> VerifyPaymentAsync(
+    int paymentId,
+    VerifyPaymentRequest request)
+    {
+        await AttachTokenAsync();
+
+        var endpoint = $"Payment/{paymentId}/verify";
+
+        var response =
+            await _httpClient.PutAsJsonAsync(
+                endpoint,
+                request);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error =
+                await response.Content.ReadAsStringAsync();
+
+            await MainThread.InvokeOnMainThreadAsync(async () =>
+            {
+                await Shell.Current.DisplayAlert(
+                    "API Error",
+                    $"PUT {endpoint}\n\nStatus : {(int)response.StatusCode}\n\n{error}",
+                    "OK");
+            });
+
+            return false;
+        }
+
+        return true;
+    }
 }
