@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PGManagement.MobileApp.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,4 +15,19 @@ public interface IApiService
     Task<bool> PutAsync<TRequest>(string endpoint, TRequest body);
     Task<bool> DeleteAsync(string endpoint);
     Task<HttpResponseMessage> PostEmptyBodyAsync(string endpoint);
+    Task<bool> UploadKycAsync(
+    int bookingId,
+    string documentType,
+    Stream fileStream,
+    string fileName);
+    Task<Stream?> DownloadKycAsync(int id);
+    Task<PaymentDetailsResponse?> GetPaymentDetailsAsync(int bookingId);
+
+    Task<bool> UploadPaymentAsync(
+        int bookingId,
+        decimal amount,
+        string transactionId,
+        string paymentMethod,
+        Stream screenshot,
+        string fileName);
 }

@@ -13,7 +13,6 @@
 
                 <VerticalStackLayout Spacing="2" Margin="0,4,0,10">
                     <Label Text="Property Analytics" FontSize="14" TextColor="#6C757D" FontAttributes="Bold" CharacterSpacing="1" />
-                    <Label Text="Operations Overview" FontSize="26" FontAttributes="Bold" TextColor="#1A1A1A" />
                 </VerticalStackLayout>
 
                 <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="14" ColumnSpacing="14">
@@ -64,8 +63,36 @@
                 <VerticalStackLayout Spacing="12" Margin="0,10,0,0">
                     <Label Text="Management Suites" FontSize="13" FontAttributes="Bold" TextColor="#6C757D" CharacterSpacing="1" Margin="2,0,0,4"/>
 
-                    <Button Text="Space Assignment" Command="{Binding GoToAllocationsCommand}" BackgroundColor="White" TextColor="#4A154B" CornerRadius="12" HeightRequest="52" FontAttributes="Bold" FontSize="15"/>
+                    <Grid ColumnDefinitions="*,*"
+      ColumnSpacing="12">
 
+                        <Button
+        Grid.Column="0"
+        Text="Space Assignment"
+        Command="{Binding GoToAllocationsCommand}"
+        BackgroundColor="White"
+        TextColor="#4A154B"
+        BorderColor="#E2E8F0"
+        BorderWidth="1"
+        CornerRadius="12"
+        HeightRequest="50"
+        FontAttributes="Bold"
+        FontSize="13"/>
+
+                        <Button
+        Grid.Column="1"
+        Text="Payment Settings"
+        Command="{Binding PaymentSettingsCommand}"
+        BackgroundColor="White"
+        TextColor="#4A154B"
+        BorderColor="#E2E8F0"
+        BorderWidth="1"
+        CornerRadius="12"
+        HeightRequest="50"
+        FontAttributes="Bold"
+        FontSize="13"/>
+
+                    </Grid>
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
                         <Button Grid.Column="0" Text="Occupant Registry" Command="{Binding GoToTenantCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
                         <Button Grid.Column="1" Text="Reservations" Command="{Binding GoToBookingsCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
@@ -76,7 +103,33 @@
                         <Button Grid.Column="1" Text="Resolution Center" Command="{Binding GoToComplaintsCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="50" FontAttributes="Bold" FontSize="13"/>
                     </Grid>
 
-                    <Button Text="Broadcast Bulletin" Command="{Binding GoToNoticesCommand}" BackgroundColor="White" TextColor="#4A154B" BorderColor="#E2E8F0" BorderWidth="1" CornerRadius="12" HeightRequest="52" FontAttributes="Bold" FontSize="15"/>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+
+                        <Button Grid.Column="0"
+            Text="Broadcast Bulletin"
+            Command="{Binding GoToNoticesCommand}"
+            BackgroundColor="White"
+            TextColor="#4A154B"
+            BorderColor="#E2E8F0"
+            BorderWidth="1"
+            CornerRadius="12"
+            HeightRequest="52"
+            FontAttributes="Bold"
+            FontSize="13"/>
+
+                        <Button Grid.Column="1"
+            Text="KYC Verification"
+            Command="{Binding NavigateToKycCommand}"
+            BackgroundColor="White"
+            TextColor="#4A154B"
+            BorderColor="#E2E8F0"
+            BorderWidth="1"
+            CornerRadius="12"
+            HeightRequest="52"
+            FontAttributes="Bold"
+            FontSize="13"/>
+
+                    </Grid>
                 </VerticalStackLayout>
 
             </VerticalStackLayout>

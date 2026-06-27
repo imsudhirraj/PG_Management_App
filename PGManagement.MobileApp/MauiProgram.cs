@@ -2,6 +2,7 @@
 using PGManagement.MobileApp.Services;
 using PGManagement.MobileApp.ViewModels;
 using PGManagement.MobileApp.Views;
+using SkiaSharp.Views.Maui.Controls.Hosting; // Crucial for .UseSkiaSharp()
 
 namespace PGManagement.MobileApp
 {
@@ -12,6 +13,7 @@ namespace PGManagement.MobileApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseSkiaSharp() // Registers the underlying animation engine cleanly
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -22,6 +24,7 @@ namespace PGManagement.MobileApp
             builder.Services.AddSingleton<ISecureStorageService, SecureStorageService>();
             builder.Services.AddSingleton<IApiService, ApiService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
+            builder.Services.AddSingleton<LocationService>();
 
             // ViewModels
             builder.Services.AddTransient<LoginViewModel>();
@@ -34,14 +37,20 @@ namespace PGManagement.MobileApp
             builder.Services.AddTransient<DashboardViewModel>();
             builder.Services.AddTransient<ProfileViewModel>();
             builder.Services.AddTransient<TenantListViewModel>();
-            builder.Services.AddTransient<TenantDetailViewModel>(); 
+            builder.Services.AddTransient<TenantDetailViewModel>();
             builder.Services.AddTransient<AllocationsListViewModel>();
             builder.Services.AddTransient<OwnerPaymentsViewModel>();
             builder.Services.AddTransient<OwnerComplaintsViewModel>();
             builder.Services.AddTransient<OwnerBookingsViewModel>();
             builder.Services.AddTransient<OwnerNoticesViewModel>();
+            builder.Services.AddTransient<PGTenantDetailViewModel>();
+            builder.Services.AddTransient<OwnerKycViewModel>();
+            builder.Services.AddTransient<TenantKycViewModel>();
+            builder.Services.AddTransient<OwnerPaymentSettingsViewModel>();
+            builder.Services.AddTransient<TenantPaymentViewModel>();
 
             // Views
+            builder.Services.AddTransient<SplashPage>(); // Registered for DI matching tracking
             builder.Services.AddTransient<LoginPage>();
             builder.Services.AddTransient<RegisterPage>();
             builder.Services.AddTransient<PGSearchPage>();
@@ -58,6 +67,11 @@ namespace PGManagement.MobileApp
             builder.Services.AddTransient<OwnerComplaintsPage>();
             builder.Services.AddTransient<OwnerBookingsPage>();
             builder.Services.AddTransient<OwnerNoticesPage>();
+            builder.Services.AddTransient<PGTenantDetailPage>();
+            builder.Services.AddTransient<OwnerKycPage>();
+            builder.Services.AddTransient<TenantKycPage>();
+            builder.Services.AddTransient<OwnerPaymentSettingsPage>();
+            builder.Services.AddTransient<TenantPaymentPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -11,7 +11,7 @@ public partial class PGSearchViewModel : ObservableObject
 {
     private readonly IApiService _apiService;
 
-    [ObservableProperty] private double radiusKm = 5;
+    [ObservableProperty] private double radiusKm = 50;
     [ObservableProperty] private bool isBusy;
     [ObservableProperty] private string statusMessage = string.Empty;
 
@@ -42,6 +42,11 @@ public partial class PGSearchViewModel : ObservableObject
             _userLat = location.Latitude;
             _userLng = location.Longitude;
 
+            await Shell.Current.DisplayAlert(
+            "My Location",
+            $"{_userLat}, {_userLng}",
+            "OK");
+
             StatusMessage = "Searching nearby PGs...";
             var query = $"PG/search?lat={_userLat}&lng={_userLng}&radiusKm={RadiusKm}";
             var results = await _apiService.GetAsync<List<PGSearchResult>>(query);
@@ -71,12 +76,34 @@ public partial class PGSearchViewModel : ObservableObject
         {
             var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
             System.Diagnostics.Debug.WriteLine($"Permission status: {status}");
-            if (status != PermissionStatus.Granted) return null;
+            if (status != PermissionStatus.Granted)
+            {
+                await Shell.Current.DisplayAlert(
+                    "Permission Required",
+                    "Location permission is required to find nearby PGs.",
+                    "OK");
 
+                await Launcher.Default.OpenAsync("app-settings:");
+                return null;
+            }
             // Try a fresh fix first
             var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
-            var location = await Geolocation.Default.GetLocationAsync(request);
+            Location? location = null;
 
+            try
+            {
+                location = await Geolocation.Default.GetLocationAsync(request);
+            }
+            catch (FeatureNotEnabledException)
+            {
+                await Shell.Current.DisplayAlert(
+                    "GPS Disabled",
+                    "Please turn on Location Services (GPS).",
+                    "OK");
+
+                await Launcher.Default.OpenAsync("app-settings:");
+                return null;
+            }
             // Fallback to last known location (more reliable on emulators)
             location ??= await Geolocation.Default.GetLastKnownLocationAsync();
 
@@ -91,4 +118,6 @@ public partial class PGSearchViewModel : ObservableObject
             return null;
         }
     }
+    [RelayCommand]
+    private async Task GoToPGDetailAsync(PGSearchResult pg) => await Shell.Current.GoToAsync($"PGTenantDetailPage?id={pg.Id}");
 }

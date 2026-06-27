@@ -87,14 +87,14 @@
                         </Border>
                     </VerticalStackLayout>
 
-                    <Button Text="Commit Profile Updates" Command="{Binding SaveCommand}" BackgroundColor="#512BD4" TextColor="White" HeightRequest="46" CornerRadius="10" FontAttributes="Bold" Margin="0,4,0,0"/>
+                    <Button Text="Commit Profile Updates" Command="{Binding SaveCommand}" BackgroundColor="#4A154B" TextColor="White" HeightRequest="46" CornerRadius="10" FontAttributes="Bold" Margin="0,4,0,0"/>
                 </VerticalStackLayout>
             </Border>
 
             <Label Text="{Binding StatusMessage}" TextColor="#E74C3C" FontSize="13" HorizontalTextAlignment="Center" FontAttributes="Italic"
                    IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}" />
 
-            <Button Text="Offboard Resident (Checkout)" Command="{Binding CheckoutCommand}" BackgroundColor="#E74C3C" TextColor="White" HeightRequest="50" CornerRadius="12" FontAttributes="Bold" Margin="0,10,0,10" />
+            <Button Text="Offboard Resident (Checkout)" Command="{Binding CheckoutCommand}" BackgroundColor="#4A154B" TextColor="White" HeightRequest="50" CornerRadius="12" FontAttributes="Bold" Margin="0,10,0,10" />
 
         </VerticalStackLayout>
     </ScrollView>

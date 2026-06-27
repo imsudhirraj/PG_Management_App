@@ -9,4 +9,5 @@ namespace PGManagement.Application.DTOs;
 public class CreateBookingRequest
 {
     public int RoomId { get; set; }
+    public string? Message { get; set; }
 }

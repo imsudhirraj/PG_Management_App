@@ -40,5 +40,69 @@ namespace PGManagement.Infrastructure.Repositories
             return await connection.QueryAsync<PaymentOverviewResponse>(
                 "dbo.sp_Payment_GetByOwnerId", new { OwnerId = ownerId }, commandType: CommandType.StoredProcedure);
         }
+
+        public async Task<PaymentDetailsResponse?> GetPaymentDetailsAsync(
+    int bookingId)
+        {
+            using var connection =
+                _connectionFactory.CreateConnection();
+
+            return await connection.QueryFirstOrDefaultAsync<PaymentDetailsResponse>(
+                "dbo.sp_Payment_GetPaymentDetails",
+                new { BookingId = bookingId },
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<int> UploadAsync(
+    int tenantId,
+    PaymentUploadRequest request,
+    string screenshotUrl)
+        {
+            using var connection =
+                _connectionFactory.CreateConnection();
+
+            return await connection.ExecuteScalarAsync<int>(
+                "dbo.sp_Payment_Insert",
+                new
+                {
+                    TenantId = tenantId,
+
+                    request.BookingId,
+
+                    request.Amount,
+
+                    request.Type,
+
+                    request.TransactionId,
+
+                    request.PaymentMethod,
+
+                    ScreenshotUrl = screenshotUrl
+                },
+                commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task VerifyAsync(
+    int paymentId,
+    string ownerId,
+    VerifyPaymentRequest request)
+        {
+            using var connection =
+                _connectionFactory.CreateConnection();
+
+            await connection.ExecuteAsync(
+                "dbo.sp_Payment_Verify",
+                new
+                {
+                    Id = paymentId,
+
+                    request.Status,
+
+                    OwnerId = ownerId,
+
+                    request.Remarks
+                },
+                commandType: CommandType.StoredProcedure);
+        }
     }
 }

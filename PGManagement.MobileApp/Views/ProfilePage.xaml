@@ -33,11 +33,11 @@
                     <Shadow Offset="0,2" Radius="6" Brush="#0A000000" Opacity="0.4"/>
                 </Border.Shadow>
                 <VerticalStackLayout>
-                    <Button Text="⚙️ Core Application Settings" Command="{Binding GoToSettingsCommand}" BackgroundColor="Transparent" TextColor="#2D3748" HorizontalOptions="Fill" HeightRequest="54" FontAttributes="Bold" FontSize="14" Padding="16,0"/>
+                    <Button Text="⚙️ Core Application Settings" Command="{Binding GoToSettingsCommand}" BackgroundColor="#4A154B" TextColor="White" HorizontalOptions="Fill" HeightRequest="54" FontAttributes="Bold" FontSize="14" Padding="16,0"/>
                 </VerticalStackLayout>
             </Border>
 
-            <Button Text="Terminate Authentication Session" Command="{Binding LogoutCommand}" BackgroundColor="#E74C3C" TextColor="White" HeightRequest="52" CornerRadius="12" FontAttributes="Bold" FontSize="15" Margin="0,16,0,0"/>
+            <Button Text="Terminate Authentication Session" Command="{Binding LogoutCommand}" BackgroundColor="#4A154B" TextColor="White" HeightRequest="52" CornerRadius="12" FontAttributes="Bold" FontSize="15" Margin="0,16,0,0"/>
 
         </VerticalStackLayout>
     </ScrollView>

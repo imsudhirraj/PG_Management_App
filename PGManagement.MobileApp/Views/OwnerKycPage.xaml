@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+    xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+    x:Class="PGManagement.MobileApp.Views.OwnerKycPage"
+    x:DataType="vm:OwnerKycViewModel"
+    Title="KYC Verification">
+
+    <RefreshView
+        Command="{Binding LoadCommand}"
+        IsRefreshing="{Binding IsBusy}">
+
+        <Grid Padding="15">
+
+            <CollectionView
+                ItemsSource="{Binding Documents}">
+
+                <CollectionView.ItemTemplate>
+
+                    <DataTemplate
+                        x:DataType="models:KycDocumentResponse">
+
+                        <Border
+    Margin="0,8"
+    Padding="16"
+    Stroke="#E5E7EB"
+    StrokeThickness="1"
+    BackgroundColor="White">
+
+                            <VerticalStackLayout Spacing="8">
+
+                                <Label
+            Text="{Binding TenantName}"
+            FontSize="18"
+            FontAttributes="Bold"
+            TextColor="#1F2937"/>
+
+                                <Label
+            Text="{Binding Email}"
+            FontSize="13"
+            TextColor="Gray"/>
+
+                                <Grid ColumnDefinitions="Auto,*"
+              RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+              ColumnSpacing="10"
+              RowSpacing="6">
+
+                                    <Label Text="PG :" FontAttributes="Bold"/>
+                                    <Label Grid.Column="1"
+                   Text="{Binding PGName}"/>
+
+                                    <Label Grid.Row="1"
+                   Text="Room :"
+                   FontAttributes="Bold"/>
+
+                                    <Label Grid.Row="1"
+                   Grid.Column="1"
+                   Text="{Binding RoomNumber}"/>
+
+                                    <Label Grid.Row="2"
+                   Text="Booking :"
+                   FontAttributes="Bold"/>
+
+                                    <Label Grid.Row="2"
+                   Grid.Column="1"
+                   Text="{Binding BookingId}"/>
+
+                                    <Label Grid.Row="3"
+                   Text="Document :"
+                   FontAttributes="Bold"/>
+
+                                    <Label Grid.Row="3"
+                   Grid.Column="1"
+                   Text="{Binding DocumentType}"/>
+
+                                    <Label Grid.Row="4"
+                   Text="Status :"
+                   FontAttributes="Bold"/>
+
+                                    <Label Grid.Row="4"
+                   Grid.Column="1"
+                   Text="{Binding VerificationStatus}"
+                   TextColor="#512BD4"
+                   FontAttributes="Bold"/>
+
+                                </Grid>
+
+                                <Label
+            Text="{Binding UploadedAt,StringFormat='Uploaded : {0:dd MMM yyyy hh:mm tt}'}"
+            FontSize="12"
+            TextColor="Gray"/>
+
+                                <Button
+            Text="View Document"
+            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OwnerKycViewModel}}, Path=OpenDocumentCommand}"
+            CommandParameter="{Binding .}"
+            BackgroundColor="#2563EB"
+            TextColor="White"/>
+
+                                <HorizontalStackLayout
+            Spacing="12">
+
+                                    <Button
+                Text="Approve"
+                BackgroundColor="#16A34A"
+                TextColor="White"
+                HorizontalOptions="FillAndExpand"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OwnerKycViewModel}}, Path=ApproveCommand}"
+                CommandParameter="{Binding .}"/>
+
+                                    <Button
+                Text="Reject"
+                BackgroundColor="#DC2626"
+                TextColor="White"
+                HorizontalOptions="FillAndExpand"
+                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OwnerKycViewModel}}, Path=RejectCommand}"
+                CommandParameter="{Binding .}"/>
+
+                                </HorizontalStackLayout>
+
+                            </VerticalStackLayout>
+
+                        </Border>
+
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+        </Grid>
+
+    </RefreshView>
+
+</ContentPage>

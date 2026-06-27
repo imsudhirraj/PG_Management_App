@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+             x:Class="PGManagement.MobileApp.Views.SplashPage"
+             BackgroundColor="#512BD4"
+             NavigationPage.HasNavigationBar="False">
+
+    <Grid VerticalOptions="Center" HorizontalOptions="Center">
+        <skia:SKLottieView 
+            Source="bunny_welcome.json"
+            RepeatCount="0"
+            HeightRequest="260"
+            WidthRequest="260"
+            IsAnimationEnabled="True"
+            AnimationCompleted="OnOpeningAnimationFinished"/>
+    </Grid>
+</ContentPage>

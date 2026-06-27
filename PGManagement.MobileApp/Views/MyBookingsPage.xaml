@@ -1,48 +1,187 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
-             xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
-             x:Class="PGManagement.MobileApp.Views.MyBookingsPage"
-             x:DataType="vm:MyBookingsViewModel"
-             Title="My Reservations"
-             BackgroundColor="#F8F9FA">
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+    xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
+    x:Class="PGManagement.MobileApp.Views.MyBookingsPage"
+    x:DataType="vm:MyBookingsViewModel"
+    Title="My Reservations"
+    BackgroundColor="#F8F9FA">
 
-    <RefreshView Command="{Binding LoadBookingsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
+    <RefreshView
+        Command="{Binding LoadBookingsCommand}"
+        IsRefreshing="{Binding IsBusy}"
+        RefreshColor="#512BD4">
+
         <Grid Padding="20">
-            <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" TextColor="#A0AEC0" FontAttributes="Italic" />
+
+            <Label Text="{Binding StatusMessage}"
+                   IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Start"
+                   Margin="0,20,0,0"
+                   TextColor="#A0AEC0"
+                   FontAttributes="Italic"/>
 
             <CollectionView ItemsSource="{Binding Bookings}">
+
                 <CollectionView.ItemTemplate>
+
                     <DataTemplate x:DataType="models:BookingResponse">
-                        <Border Margin="0,0,0,12" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+
+                        <Border Margin="0,0,0,14"
+                                Padding="16"
+                                StrokeShape="RoundRectangle 16"
+                                StrokeThickness="0"
+                                BackgroundColor="White">
+
                             <Border.Shadow>
-                                <Shadow Offset="0,2" Radius="6" Brush="#0A000000" Opacity="0.4"/>
+                                <Shadow Offset="0,2"
+                                        Radius="6"
+                                        Brush="#0A000000"
+                                        Opacity="0.4"/>
                             </Border.Shadow>
 
-                            <Grid ColumnDefinitions="*,Auto">
-                                <VerticalStackLayout Grid.Column="0" Spacing="6">
-                                    <Label Text="{Binding PGName}" FontAttributes="Bold" FontSize="17" TextColor="#1A1A1A" />
+                            <VerticalStackLayout Spacing="12">
 
-                                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                                        <Border BackgroundColor="#EDF2F7" Padding="8,4" StrokeShape="RoundRectangle 6" StrokeThickness="0">
-                                            <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="12" FontAttributes="Bold" TextColor="#4A154B" />
-                                        </Border>
-                                        <Label Text="{Binding BookingDate, StringFormat='Reserved: {0:dd MMM yyyy}'}" FontSize="12" TextColor="#718096" VerticalOptions="Center" />
-                                    </HorizontalStackLayout>
-                                </VerticalStackLayout>
+                                <!-- Header -->
 
-                                <!-- Premium Dynamic Status Pill Container -->
-                                <Border Grid.Column="1" Padding="12,6" StrokeShape="RoundRectangle 20" StrokeThickness="0" BackgroundColor="#F8F9FA" VerticalOptions="Center">
-                                    <Label Text="{Binding Status}" FontAttributes="Bold" FontSize="11" CharacterSpacing="0.5" HorizontalOptions="Center" VerticalOptions="Center"
-                                           TextColor="{Binding Status, Converter={StaticResource StatusColorConverter}}" />
+                                <Grid ColumnDefinitions="*,Auto">
+
+                                    <VerticalStackLayout Grid.Column="0"
+                                                         Spacing="5">
+
+                                        <Label Text="{Binding PGName}"
+                                               FontAttributes="Bold"
+                                               FontSize="18"
+                                               TextColor="#1A1A1A"/>
+
+                                        <Label Text="{Binding PGAddress}"
+                                               FontSize="12"
+                                               TextColor="#718096"/>
+
+                                        <Label Text="{Binding City}"
+                                               FontSize="12"
+                                               TextColor="#718096"/>
+
+                                    </VerticalStackLayout>
+
+                                    <Border Grid.Column="1"
+                                            Padding="12,6"
+                                            StrokeShape="RoundRectangle 20"
+                                            StrokeThickness="0"
+                                            BackgroundColor="#F8F9FA">
+
+                                        <Label Text="{Binding Status}"
+                                               FontAttributes="Bold"
+                                               FontSize="11"
+                                               TextColor="{Binding Status, Converter={StaticResource StatusColorConverter}}"/>
+
+                                    </Border>
+
+                                </Grid>
+
+                                <!-- Room Info -->
+
+                                <Border BackgroundColor="#EDF2F7"
+                                        Padding="10"
+                                        StrokeThickness="0">
+
+                                    <VerticalStackLayout>
+
+                                        <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}"
+                                               FontAttributes="Bold"
+                                               TextColor="#512BD4"/>
+
+                                        <Label Text="{Binding BookingDate, StringFormat='Booked On : {0:dd MMM yyyy}'}"
+                                               FontSize="12"
+                                               TextColor="#718096"/>
+
+                                    </VerticalStackLayout>
+
                                 </Border>
-                            </Grid>
+
+                                <!-- Tenant Message -->
+
+                                <Border BackgroundColor="#F7FAFC"
+                                        Padding="10"
+                                        StrokeThickness="0">
+
+                                    <VerticalStackLayout>
+
+                                        <Label Text="Message"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="#512BD4"/>
+
+                                        <Label Text="{Binding Message}"
+                                               FontSize="12"
+                                               TextColor="#4A5568"/>
+
+                                    </VerticalStackLayout>
+
+                                </Border>
+
+                                <!-- Approved Section -->
+
+                                <Border BackgroundColor="#E8FFF1"
+        Padding="12"
+        StrokeThickness="0"
+        IsVisible="{Binding CanUploadKyc}">
+
+                                    <VerticalStackLayout Spacing="10">
+
+                                        <Label Text="Booking Approved ✓"
+               FontAttributes="Bold"
+               TextColor="#2ECC71"/>
+
+                                        <Button
+            Text="Upload KYC"
+            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.UploadKycCommand}"
+            CommandParameter="{Binding .}"
+            BackgroundColor="#512BD4"
+            TextColor="White"
+            CornerRadius="10"/>
+
+                                        <Button
+            Text="Pay Advance"
+            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.PayAdvanceCommand}"
+            CommandParameter="{Binding .}"
+            IsVisible="{Binding CanPay}"
+            BackgroundColor="#2ECC71"
+            TextColor="White"
+            CornerRadius="10"/>
+
+                                        <Button
+            Text="Chat with Owner"
+            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ChatWithOwnerCommand}"
+            CommandParameter="{Binding .}"
+            IsVisible="{Binding CanChat}"
+            BackgroundColor="#4A154B"
+            TextColor="White"
+            CornerRadius="10"/>
+
+                                    </VerticalStackLayout>
+
+                                </Border>
+
+                                <!-- Action Buttons -->
+
+                                
+
+                            </VerticalStackLayout>
+
                         </Border>
+
                     </DataTemplate>
+
                 </CollectionView.ItemTemplate>
+
             </CollectionView>
+
         </Grid>
+
     </RefreshView>
+
 </ContentPage>

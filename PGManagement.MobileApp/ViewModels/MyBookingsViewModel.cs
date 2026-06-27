@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 //using IntelliJ.Lang.Annotations;
 using PGManagement.MobileApp.Models;
 using PGManagement.MobileApp.Services;
+using PGManagement.MobileApp.Views;
 using System.Collections.ObjectModel;
 
 namespace PGManagement.MobileApp.ViewModels;
@@ -47,5 +48,53 @@ public partial class MyBookingsViewModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task OpenKycAsync(BookingResponse booking)
+    {
+        await Shell.Current.GoToAsync(
+            $"TenantKycPage?bookingId={booking.Id}");
+    }
+
+    [RelayCommand]
+    private async Task OpenPaymentAsync(BookingResponse booking)
+    {
+        await Shell.Current.GoToAsync(
+            $"TenantPaymentPage?bookingId={booking.Id}");
+    }
+
+    [RelayCommand]
+    private async Task OpenChatAsync(BookingResponse booking)
+    {
+        await Shell.Current.GoToAsync(
+            $"TenantChatPage?bookingId={booking.Id}");
+    }
+
+    [RelayCommand]
+    private async Task UploadKycAsync(BookingResponse booking)
+    {
+        await Shell.Current.GoToAsync(
+            $"{nameof(TenantKycPage)}?bookingId={booking.Id}");
+    }
+
+    [RelayCommand]
+    private async Task PayAdvanceAsync(BookingResponse booking)
+    {
+        await Shell.Current.GoToAsync(
+            nameof(TenantPaymentPage),
+            new Dictionary<string, object>
+            {
+                ["bookingId"] = booking.Id
+            });
+    }
+
+    [RelayCommand]
+    private async Task ChatWithOwnerAsync(BookingResponse booking)
+    {
+        await Shell.Current.DisplayAlert(
+            "Coming Soon",
+            "Chat module will be implemented later.",
+            "OK");
     }
 }

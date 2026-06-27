@@ -12,6 +12,16 @@ namespace PGManagement.Application.Interfaces
         Task<int> CreateAsync(int tenantId, RecordPaymentRequest request);
         Task<IEnumerable<PaymentResponse>> GetByTenantIdAsync(int tenantId);
         Task<IEnumerable<PaymentOverviewResponse>> GetByOwnerIdAsync(string ownerId);
+        Task<PaymentDetailsResponse?> GetPaymentDetailsAsync(int bookingId);
 
+        Task<int> UploadAsync(
+            int tenantId,
+            PaymentUploadRequest request,
+            string screenshotUrl);
+
+        Task VerifyAsync(
+            int id,
+            string ownerId,
+            VerifyPaymentRequest request);
     }
 }

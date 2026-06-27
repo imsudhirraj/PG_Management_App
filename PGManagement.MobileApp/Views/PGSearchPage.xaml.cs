@@ -1,10 +1,12 @@
+using PGManagement.MobileApp.ViewModels;
+
 namespace PGManagement.MobileApp.Views;
 
 public partial class PGSearchPage : ContentPage
 {
-    public PGSearchPage(ViewModels.PGSearchViewModel vm)
+    public PGSearchPage(PGSearchViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = vm;
+        BindingContext = viewModel;
     }
 }

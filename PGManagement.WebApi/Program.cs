@@ -65,6 +65,7 @@ builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
 builder.Services.AddScoped<INoticeRepository, NoticeRepository>();
 builder.Services.AddScoped<IDashboardRepository, DashboardRepository>();
 builder.Services.AddScoped<IKycRepository, KycRepository>();
+builder.Services.AddScoped<IOwnerPaymentSettingsRepository, OwnerPaymentSettingsRepository>();
 
 // Services
 builder.Services.AddScoped<ITokenService, TokenService>();
@@ -114,6 +115,7 @@ app.UseSwagger();
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "PG Management API V1");
+    c.RoutePrefix = string.Empty;
 });
 
 // Middleware

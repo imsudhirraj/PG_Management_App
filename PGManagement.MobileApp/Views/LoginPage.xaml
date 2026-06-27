@@ -16,11 +16,11 @@
 
             <VerticalStackLayout Spacing="14">
                 <Border Padding="12,2" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
-                    <Entry Placeholder="Account Email" Keyboard="Email" Text="{Binding Email}" TextColor="#1A1A1A" PlaceholderColor="#A0AEC0" HeightRequest="46"/>
+                    <Entry Placeholder="Account Email" Keyboard="Email" Text="{Binding Email}" TextColor="#4A154B" PlaceholderColor="#A0AEC0" HeightRequest="46"/>
                 </Border>
 
                 <Border Padding="12,2" StrokeShape="RoundRectangle 12" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
-                    <Entry Placeholder="Security Password" IsPassword="True" Text="{Binding Password}" TextColor="#1A1A1A" PlaceholderColor="#A0AEC0" HeightRequest="46"/>
+                    <Entry Placeholder="Security Password" IsPassword="True" Text="{Binding Password}" TextColor="#4A154B" PlaceholderColor="#A0AEC0" HeightRequest="46"/>
                 </Border>
             </VerticalStackLayout>
 
@@ -31,10 +31,10 @@
                 <Button Text="Authenticate Access" Command="{Binding LoginCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
                         BackgroundColor="#4A154B" TextColor="White" HeightRequest="52" CornerRadius="12" FontAttributes="Bold" FontSize="16" />
 
-                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#512BD4" HorizontalOptions="Center"/>
+                <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#4A154B" HorizontalOptions="Center"/>
 
                 <Button Text="Establish New Enterprise Account" Command="{Binding GoToRegisterCommand}"
-                        BackgroundColor="Transparent" TextColor="#512BD4" FontAttributes="Bold" FontSize="14" HeightRequest="44"/>
+                        BackgroundColor="Transparent" TextColor="#4A154B" FontAttributes="Bold" FontSize="14" HeightRequest="44"/>
             </VerticalStackLayout>
 
         </VerticalStackLayout>

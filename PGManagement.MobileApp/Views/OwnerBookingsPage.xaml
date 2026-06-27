@@ -8,44 +8,152 @@
              Title="Incoming Reservations"
              BackgroundColor="#F8F9FA">
 
-    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
+    <RefreshView Command="{Binding LoadCommand}"
+                 IsRefreshing="{Binding IsBusy}"
+                 RefreshColor="#512BD4">
+
         <Grid Padding="20">
-            <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" TextColor="#A0AEC0" FontAttributes="Italic" />
+
+            <Label Text="{Binding StatusMessage}"
+                   IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+                   HorizontalOptions="Center"
+                   VerticalOptions="Start"
+                   Margin="0,20,0,0"
+                   TextColor="#A0AEC0"
+                   FontAttributes="Italic" />
 
             <CollectionView ItemsSource="{Binding Bookings}">
+
                 <CollectionView.ItemTemplate>
+
                     <DataTemplate x:DataType="models:BookingOverviewResponse">
-                        <Border Margin="0,0,0,14" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+
+                        <Border Margin="0,0,0,14"
+                                Padding="16"
+                                StrokeShape="RoundRectangle 16"
+                                StrokeThickness="0"
+                                BackgroundColor="White">
+
                             <Border.Shadow>
-                                <Shadow Offset="0,3" Radius="8" Brush="#0A000000" Opacity="0.4"/>
+                                <Shadow Offset="0,3"
+                                        Radius="8"
+                                        Brush="#0A000000"
+                                        Opacity="0.4" />
                             </Border.Shadow>
 
                             <VerticalStackLayout Spacing="12">
+
+                                <!-- Header -->
                                 <Grid ColumnDefinitions="*,Auto">
-                                    <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                        <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="17" TextColor="#1A1A1A" />
-                                        <Label Text="{Binding PGName}" FontSize="13" TextColor="#718096" />
+
+                                    <VerticalStackLayout Grid.Column="0"
+                                                         Spacing="4">
+
+                                        <Label Text="{Binding TenantName}"
+                                               FontAttributes="Bold"
+                                               FontSize="17"
+                                               TextColor="#1A1A1A" />
+
+                                        <Label Text="{Binding PGName}"
+                                               FontSize="13"
+                                               TextColor="#718096" />
+
                                     </VerticalStackLayout>
 
-                                    <Border Grid.Column="1" Padding="10,4" StrokeShape="RoundRectangle 12" StrokeThickness="0" BackgroundColor="#F8F9FA" VerticalOptions="Start">
-                                        <Label Text="{Binding Status}" FontAttributes="Bold" FontSize="11" CharacterSpacing="0.5"
+                                    <Border Grid.Column="1"
+                                            Padding="10,4"
+                                            StrokeShape="RoundRectangle 12"
+                                            StrokeThickness="0"
+                                            BackgroundColor="#F8F9FA"
+                                            VerticalOptions="Start">
+
+                                        <Label Text="{Binding Status}"
+                                               FontAttributes="Bold"
+                                               FontSize="11"
+                                               CharacterSpacing="0.5"
                                                TextColor="{Binding Status, Converter={StaticResource StatusColorConverter}}" />
+
                                     </Border>
+
                                 </Grid>
 
-                                <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center" BackgroundColor="#F7FAFC" Padding="10,6">
-                                    <Label Grid.Column="0" Text="{Binding RoomNumber, StringFormat='Target Allocation: Room {0}'}" FontSize="12" FontAttributes="Bold" TextColor="#4A154B" VerticalOptions="Center"/>
-                                    <Label Grid.Column="1" Text="{Binding BookingDate, StringFormat='{0:dd MMM yyyy}'}" TextColor="#A0AEC0" FontSize="11" VerticalOptions="Center" />
+                                <!-- Tenant Message -->
+                                <Border BackgroundColor="#F7FAFC"
+                                        Padding="10"
+                                        StrokeThickness="0">
+
+                                    <VerticalStackLayout Spacing="4">
+
+                                        <Label Text="Tenant Message"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               TextColor="#512BD4" />
+
+                                        <Label Text="{Binding Message}"
+                                               FontSize="12"
+                                               TextColor="#4A5568" />
+
+                                    </VerticalStackLayout>
+
+                                </Border>
+
+                                <!-- Room Details -->
+                                <Grid ColumnDefinitions="*,Auto"
+                                      BackgroundColor="#F7FAFC"
+                                      Padding="10,6">
+
+                                    <Label Grid.Column="0"
+                                           Text="{Binding RoomNumber, StringFormat='Requested Room : {0}'}"
+                                           FontSize="12"
+                                           FontAttributes="Bold"
+                                           TextColor="#4A154B" />
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding BookingDate, StringFormat='{0:dd MMM yyyy}'}"
+                                           FontSize="11"
+                                           TextColor="#A0AEC0" />
+
                                 </Grid>
 
-                                <Button Text="Authorize Admission" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:OwnerBookingsViewModel}}, Path=ConfirmBookingCommand}" CommandParameter="{Binding .}"
-                                        BackgroundColor="#512BD4" TextColor="White" HeightRequest="40" CornerRadius="8" FontAttributes="Bold" FontSize="13" />
+                                <!-- Approve / Reject -->
+                                <Grid ColumnDefinitions="*,*"
+                                      ColumnSpacing="10"
+                                      IsVisible="{Binding CanApprove}">
+
+                                    <Button Grid.Column="0"
+                                            Text="Approve"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ApproveBookingCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#2ECC71"
+                                            TextColor="White"
+                                            HeightRequest="42"
+                                            CornerRadius="10"
+                                            FontAttributes="Bold" />
+
+                                    <Button Grid.Column="1"
+                                            Text="Reject"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RejectBookingCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#E74C3C"
+                                            TextColor="White"
+                                            HeightRequest="42"
+                                            CornerRadius="10"
+                                            FontAttributes="Bold" />
+
+                                </Grid>
+
                             </VerticalStackLayout>
+
                         </Border>
+
                     </DataTemplate>
+
                 </CollectionView.ItemTemplate>
+
             </CollectionView>
+
         </Grid>
+
     </RefreshView>
+
 </ContentPage>

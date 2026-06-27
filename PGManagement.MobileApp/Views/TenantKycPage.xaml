@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+    x:Class="PGManagement.MobileApp.Views.TenantKycPage"
+    x:DataType="vm:TenantKycViewModel"
+    Title="Upload KYC">
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="15">
+
+            <Label
+                Text="KYC Verification"
+                FontSize="24"
+                FontAttributes="Bold"/>
+
+            <Picker
+                Title="Document Type"
+                SelectedItem="{Binding SelectedDocumentType}">
+
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Aadhaar</x:String>
+                        <x:String>PAN</x:String>
+                        <x:String>Passport</x:String>
+                        <x:String>Driving License</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+
+            </Picker>
+
+            <Button
+    Text="Choose Document"
+    Command="{Binding PickDocumentCommand}" />
+
+            <Label
+    Text="{Binding SelectedFileName}"
+    FontSize="12"
+    TextColor="Gray" />
+
+            <Button
+                Text="Upload KYC"
+                Command="{Binding UploadKycCommand}"
+                BackgroundColor="#512BD4"
+                TextColor="White"/>
+
+            <Label
+                Text="{Binding StatusMessage}"
+                TextColor="Red"/>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+
+</ContentPage>

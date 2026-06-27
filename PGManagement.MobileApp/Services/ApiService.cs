@@ -1,4 +1,5 @@
-﻿using System.Net.Http.Headers;
+﻿using PGManagement.MobileApp.Models;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace PGManagement.MobileApp.Services;
@@ -92,5 +93,122 @@ public class ApiService : IApiService
         await AttachTokenAsync();
         // Sends a POST request with an empty string content to match the backend expectation
         return await _httpClient.PostAsync(endpoint, null);
+    }
+
+    public async Task<bool> UploadKycAsync(
+    int bookingId,
+    string documentType,
+    Stream fileStream,
+    string fileName)
+    {
+        await AttachTokenAsync();
+
+        using var form = new MultipartFormDataContent();
+
+        form.Add(
+            new StringContent(bookingId.ToString()),
+            "BookingId");
+
+        form.Add(
+            new StringContent(documentType),
+            "DocumentType");
+
+        var streamContent = new StreamContent(fileStream);
+
+        streamContent.Headers.ContentType =
+            new MediaTypeHeaderValue("application/octet-stream");
+
+        form.Add(
+            streamContent,
+            "File",
+            fileName);
+
+        var response = await _httpClient.PostAsync(
+            "Kyc",
+            form);
+
+        return response.IsSuccessStatusCode;
+    }
+
+    public async Task<Stream?> DownloadKycAsync(int id)
+    {
+        await AttachTokenAsync();
+
+        var response = await _httpClient.GetAsync(
+            $"Kyc/{id}/download");
+
+        if (!response.IsSuccessStatusCode)
+            return null;
+
+        return await response.Content.ReadAsStreamAsync();
+    }
+
+    public async Task<PaymentDetailsResponse?> GetPaymentDetailsAsync(int bookingId)
+    {
+        await AttachTokenAsync();
+
+        var endpoint = $"Payment/details/{bookingId}";
+
+        var response = await _httpClient.GetAsync(endpoint);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var error = await response.Content.ReadAsStringAsync();
+
+            throw new Exception(
+                $"Status: {(int)response.StatusCode}\n" +
+                $"Endpoint: {endpoint}\n\n" +
+                error);
+        }
+
+        return await response.Content.ReadFromJsonAsync<PaymentDetailsResponse>();
+    }
+    public async Task<bool> UploadPaymentAsync(
+    int bookingId,
+    decimal amount,
+    string transactionId,
+    string paymentMethod,
+    Stream screenshot,
+    string fileName)
+    {
+        await AttachTokenAsync();
+
+        using var form = new MultipartFormDataContent();
+
+        form.Add(
+            new StringContent(bookingId.ToString()),
+            "BookingId");
+
+        form.Add(
+            new StringContent(amount.ToString()),
+            "Amount");
+
+        form.Add(
+            new StringContent("Advance"),
+            "Type");
+
+        form.Add(
+            new StringContent(transactionId),
+            "TransactionId");
+
+        form.Add(
+            new StringContent(paymentMethod),
+            "PaymentMethod");
+
+        var fileContent = new StreamContent(screenshot);
+
+        fileContent.Headers.ContentType =
+            new System.Net.Http.Headers.MediaTypeHeaderValue("application/octet-stream");
+
+        form.Add(
+            fileContent,
+            "Screenshot",
+            fileName);
+
+        var response = await _httpClient.PostAsync(
+            "Payment",
+            form);
+
+        return response.IsSuccessStatusCode;
     }
 }

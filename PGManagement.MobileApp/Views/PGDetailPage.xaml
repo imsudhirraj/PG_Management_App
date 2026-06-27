@@ -44,34 +44,34 @@
                 </Border.Shadow>
                 <VerticalStackLayout Spacing="14">
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Estate Name" FontSize="11" FontAttributes="Bold" TextColor="#6C757D" />
+                        <Label Text="Estate Name" FontSize="11" FontAttributes="Bold" TextColor="#4a154b" />
                         <Border Padding="12,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
                             <Entry Text="{Binding Name}" HeightRequest="44"/>
                         </Border>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Property Location Address" FontSize="11" FontAttributes="Bold" TextColor="#6C757D" />
+                        <Label Text="Property Location Address" FontSize="11" FontAttributes="Bold" TextColor="#4a154b" />
                         <Border Padding="12,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
                             <Entry Text="{Binding Address}" HeightRequest="44"/>
                         </Border>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="City Location" FontSize="11" FontAttributes="Bold" TextColor="#6C757D" />
+                        <Label Text="City Location" FontSize="11" FontAttributes="Bold" TextColor="#4a154b" />
                         <Border Padding="12,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
                             <Entry Text="{Binding City}" HeightRequest="44"/>
                         </Border>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Profile Description Statement" FontSize="11" FontAttributes="Bold" TextColor="#6C757D" />
+                        <Label Text="Profile Description Statement" FontSize="11" FontAttributes="Bold" TextColor="#4a154b" />
                         <Border Padding="12,4" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
                             <Editor Text="{Binding Description}" HeightRequest="90"/>
                         </Border>
                     </VerticalStackLayout>
 
-                    <Button Text="Commit Profile Upgrades" Command="{Binding SaveCommand}" BackgroundColor="#512BD4" TextColor="White" HeightRequest="46" CornerRadius="10" FontAttributes="Bold" Margin="0,4,0,0"/>
+                    <Button Text="Commit Profile Upgrades" Command="{Binding SaveCommand}" BackgroundColor="#4a154b" TextColor="White" HeightRequest="46" CornerRadius="10" FontAttributes="Bold" Margin="0,4,0,0"/>
                 </VerticalStackLayout>
             </Border>
 
@@ -79,7 +79,7 @@
                    IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}" />
 
             <!-- Destructive Action Segment Grid -->
-            <Button Text="Deprovision Estate Profile" Command="{Binding DeleteCommand}" BackgroundColor="#E74C3C" TextColor="White" HeightRequest="50" CornerRadius="12" FontAttributes="Bold" Margin="0,10,0,10"/>
+            <Button Text="Deprovision Estate Profile" Command="{Binding DeleteCommand}" BackgroundColor="#4A154B" TextColor="White" HeightRequest="50" CornerRadius="12" FontAttributes="Bold" Margin="0,10,0,10"/>
 
         </VerticalStackLayout>
     </ScrollView>

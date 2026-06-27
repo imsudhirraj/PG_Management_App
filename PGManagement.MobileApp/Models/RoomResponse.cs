@@ -11,3 +11,10 @@ public class RoomResponse
     public string Status { get; set; } = string.Empty;
     public int AvailableBeds { get; set; }
 }
+
+public class CreateBookingRequest   // 👈 ADD THIS
+{
+    public int RoomId { get; set; }
+    public string? Message { get; set; }
+
+}

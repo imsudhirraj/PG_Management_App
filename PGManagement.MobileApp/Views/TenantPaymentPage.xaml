@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels" 
+             x:Class="PGManagement.MobileApp.Views.TenantPaymentPage" 
+             x:DataType="vm:TenantPaymentViewModel">
+
+
+    <ScrollView>
+
+        <VerticalStackLayout
+            Padding="20"
+            Spacing="20">
+
+            <!-- Header -->
+
+            <Frame
+                CornerRadius="16"
+                HasShadow="True"
+                BackgroundColor="#512BD4"
+                Padding="18">
+
+                <VerticalStackLayout>
+
+                    <Label
+                        Text="Advance Payment"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        TextColor="White"/>
+
+                    <Label
+                        Text="Complete the payment to proceed with your booking."
+                        TextColor="White"
+                        Opacity="0.9"/>
+
+                </VerticalStackLayout>
+
+            </Frame>
+            
+
+            <!-- Booking Details -->
+
+            <Frame
+                CornerRadius="16"
+                BorderColor="#E5E7EB"
+                Padding="18">
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label
+                        Text="Booking Details"
+                        FontAttributes="Bold"
+                        FontSize="18"/>
+
+                    <Grid
+                        ColumnDefinitions="Auto,*"
+                        RowDefinitions="Auto,Auto,Auto">
+
+                        <Label
+                            Text="PG"
+                            FontAttributes="Bold"/>
+
+                        <Label
+                            Grid.Column="1"
+                            Text="{Binding PGName}"/>
+
+                        <Label
+                            Grid.Row="1"
+                            Text="Room"
+                            FontAttributes="Bold"/>
+
+                        <Label
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding RoomNumber}"/>
+
+                        <Label
+                            Grid.Row="2"
+                            Text="Advance"
+                            FontAttributes="Bold"/>
+
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Text="{Binding Amount,StringFormat='₹ {0:F2}'}"
+                            FontAttributes="Bold"
+                            TextColor="#16A34A"/>
+
+                    </Grid>
+
+                </VerticalStackLayout>
+
+            </Frame>
+
+            <!-- Payment Details -->
+
+            <Frame
+                CornerRadius="16"
+                BorderColor="#E5E7EB"
+                Padding="18">
+
+                <VerticalStackLayout Spacing="12">
+
+                    <Label
+                        Text="Owner Payment Details"
+                        FontSize="18"
+                        FontAttributes="Bold"/>
+
+                    <Label
+                        Text="Account Holder"
+                        FontAttributes="Bold"/>
+
+                    <Label
+                        Text="{Binding AccountHolderName}"/>
+
+                    <Label
+                        Text="UPI ID"
+                        FontAttributes="Bold"/>
+
+                    <Frame
+                        BackgroundColor="#F3F4F6"
+                        CornerRadius="10"
+                        Padding="10">
+
+                        <Label
+                            Text="{Binding UpiId}"
+                            FontSize="16"
+                            HorizontalOptions="Center"/>
+
+                    </Frame>
+
+                </VerticalStackLayout>
+
+            </Frame>
+
+
+            <!-- QR & UPI Payment -->
+
+            <Frame
+    Padding="20"
+    CornerRadius="16"
+    BorderColor="#E5E7EB"
+    HasShadow="True">
+
+                <VerticalStackLayout
+        HorizontalOptions="Center"
+        Spacing="15">
+
+                    <Label
+            Text="Scan &amp; Pay"
+            FontSize="20"
+            FontAttributes="Bold"
+            HorizontalOptions="Center"/>
+
+                    <Label
+            Text="Scan this QR using any UPI app"
+            FontSize="13"
+            TextColor="Gray"
+            HorizontalOptions="Center"/>
+
+                    <!-- QR Card -->
+
+                    <Frame
+            WidthRequest="240"
+            HeightRequest="240"
+            BackgroundColor="White"
+            BorderColor="#D1D5DB"
+            CornerRadius="12"
+            Padding="10"
+            HorizontalOptions="Center">
+
+                        <Image
+                Source="{Binding QrImage}"
+                Aspect="AspectFit"
+                WidthRequest="220"
+                HeightRequest="220"/>
+                    </Frame>
+
+                    <!-- UPI Id -->
+
+                    <Frame
+            BackgroundColor="#F8FAFC"
+            BorderColor="#E5E7EB"
+            CornerRadius="10"
+            Padding="10"
+            WidthRequest="280">
+
+                        <VerticalStackLayout
+                Spacing="5">
+
+                            <Label
+                    Text="UPI ID"
+                    FontAttributes="Bold"
+                    HorizontalOptions="Center"/>
+
+                            <Label
+                    Text="{Binding UpiId}"
+                    FontSize="15"
+                    HorizontalOptions="Center"
+                    TextColor="#512BD4"/>
+
+                        </VerticalStackLayout>
+
+                    </Frame>
+
+                    <!-- Open UPI Apps -->
+
+                    <Button
+            Text="Pay Using Google Pay / PhonePe / Paytm"
+            Command="{Binding OpenUpiCommand}"
+            BackgroundColor="#512BD4"
+            TextColor="White"
+            FontAttributes="Bold"
+            HeightRequest="52"
+            CornerRadius="12"/>
+
+                </VerticalStackLayout>
+
+            </Frame>
+
+
+            <!-- Transaction -->
+
+            <Entry
+                Placeholder="Enter UPI Transaction ID"
+                Text="{Binding TransactionId}"/>
+
+            <!-- Screenshot -->
+
+            <Button
+                Text="Choose Payment Screenshot"
+                Command="{Binding PickScreenshotCommand}"
+                BackgroundColor="#E5E7EB"
+                TextColor="Black"/>
+
+            <Label
+                Text="{Binding SelectedFileName}"
+                FontSize="12"
+                TextColor="Gray"/>
+
+            <!-- Submit -->
+
+            <Button
+                Text="Submit Payment"
+                Command="{Binding SubmitPaymentCommand}"
+                BackgroundColor="#16A34A"
+                TextColor="White"
+                FontAttributes="Bold"
+                HeightRequest="55"
+                CornerRadius="12"/>
+
+        </VerticalStackLayout>
+
+    </ScrollView>
+    
+</ContentPage>

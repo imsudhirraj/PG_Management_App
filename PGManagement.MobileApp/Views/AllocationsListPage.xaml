@@ -18,7 +18,7 @@
 
             <VerticalStackLayout Spacing="12">
                 <VerticalStackLayout Spacing="4">
-                    <Label Text="Estates Control Target" FontSize="11" FontAttributes="Bold" TextColor="#6C757D" CharacterSpacing="0.5" />
+                    <Label Text="Estates Control Target" FontSize="11" FontAttributes="Bold" TextColor="#4A154B" CharacterSpacing="0.5" />
                     <Border Padding="10,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
                         <Picker ItemsSource="{Binding MyPGs}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedPG}" HeightRequest="42"/>
                     </Border>
@@ -51,7 +51,7 @@
                     <Border Grid.Column="0" Padding="10,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
                         <DatePicker Date="{Binding AllocatedFrom}" Format="dd MMM yyyy" HeightRequest="42" VerticalOptions="Center"/>
                     </Border>
-                    <Button Grid.Column="1" Text="Execute Assignment" Command="{Binding AllocateCommand}" WidthRequest="150" HeightRequest="42" BackgroundColor="#512BD4" TextColor="White" FontAttributes="Bold" CornerRadius="10" FontSize="13" />
+                    <Button Grid.Column="1" Text="Execute Assignment" Command="{Binding AllocateCommand}" WidthRequest="150" HeightRequest="42" BackgroundColor="#4A154B" TextColor="White" FontAttributes="Bold" CornerRadius="10" FontSize="13" />
                 </Grid>
 
                 <Label Text="{Binding AllocateError}" TextColor="#E74C3C" FontSize="12" HorizontalTextAlignment="Center" FontAttributes="Italic"
@@ -61,7 +61,7 @@
 
         <!-- Dynamic Data Feed Registry Area -->
         <Grid Grid.Row="1" RowDefinitions="Auto,*">
-            <Label Grid.Row="0" Text="Current Assigned Registry" FontAttributes="Bold" FontSize="14" TextColor="#1A1A1A" Margin="4,4,0,8" />
+            <Label Grid.Row="0" Text="Current Assigned Registry" FontAttributes="Bold" FontSize="14" TextColor="#4A154B" Margin="4,4,0,8" />
 
             <RefreshView Grid.Row="1" Command="{Binding LoadAllocationsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
                 <Grid>
@@ -77,14 +77,14 @@
                                     </Border.Shadow>
                                     <Grid ColumnDefinitions="*,Auto">
                                         <VerticalStackLayout Grid.Column="0" Spacing="6">
-                                            <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" TextColor="#1A1A1A" />
+                                            <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" TextColor="#4A154B" />
 
                                             <!-- Structural Subtitle Tag Line -->
                                             <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
                                                 <Border BackgroundColor="#EDF2F7" Padding="8,4" StrokeShape="RoundRectangle 6" StrokeThickness="0">
                                                     <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="11" FontAttributes="Bold" TextColor="#4A154B" />
                                                 </Border>
-                                                <Label Text="{Binding AllocatedFrom, StringFormat='Timeline: {0:dd MMM yyyy}'}" FontSize="12" TextColor="#718096" VerticalOptions="Center" />
+                                                <Label Text="{Binding AllocatedFrom, StringFormat='Timeline: {0:dd MMM yyyy}'}" FontSize="12" TextColor="#4A154B" VerticalOptions="Center" />
                                             </HorizontalStackLayout>
 
                                             <!-- Status Micro-badges -->
@@ -99,7 +99,7 @@
                                         </VerticalStackLayout>
 
                                         <!-- Interactive Out-Onboarding Action Target -->
-                                        <Button Grid.Column="1" Text="Vacate Space" FontSize="11" HeightRequest="34" Padding="12,0" BackgroundColor="#E74C3C" TextColor="White" FontAttributes="Bold" CornerRadius="8"
+                                        <Button Grid.Column="1" Text="Vacate Space" FontSize="11" HeightRequest="34" Padding="12,0" BackgroundColor="#4A154B" TextColor="White" FontAttributes="Bold" CornerRadius="8"
                                                 IsVisible="{Binding IsActive}"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AllocationsListViewModel}}, Path=VacateCommand}"
                                                 CommandParameter="{Binding .}" VerticalOptions="Center" />

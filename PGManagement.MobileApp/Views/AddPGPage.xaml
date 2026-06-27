@@ -10,10 +10,10 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <VerticalStackLayout Spacing="2" Margin="4,4,0,4">
+            <!--<VerticalStackLayout Spacing="2" Margin="4,4,0,4">
                 <Label Text="Estate Management" FontSize="12" FontAttributes="Bold" TextColor="#512BD4" CharacterSpacing="1" />
                 <Label Text="New Property Registry" FontSize="24" FontAttributes="Bold" TextColor="#1A1A1A" />
-            </VerticalStackLayout>
+            </VerticalStackLayout>-->
 
             <!-- Primary Structural Deck -->
             <Border Padding="18" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
@@ -61,7 +61,7 @@
                 <VerticalStackLayout Spacing="14">
                     <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
                         <Label Grid.Column="0" Text="Geographic Coordinates" FontAttributes="Bold" FontSize="14" TextColor="#4A154B" VerticalOptions="Center"/>
-                        <Button Grid.Column="1" Text="Fetch GPS Position" Command="{Binding UseCurrentLocationCommand}" BackgroundColor="#512BD4" TextColor="White" HeightRequest="36" Padding="14,0" CornerRadius="8" FontSize="11" FontAttributes="Bold"/>
+                        <Button Grid.Column="1" Text="Fetch GPS Position" Command="{Binding UseCurrentLocationCommand}" BackgroundColor="#4A154B" TextColor="White" HeightRequest="36" Padding="14,0" CornerRadius="8" FontSize="11" FontAttributes="Bold"/>
                     </Grid>
 
                     <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
