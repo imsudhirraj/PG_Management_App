@@ -19,28 +19,27 @@ public class BookingController : ControllerBase
         _tenantRepository = tenantRepository;
     }
 
-    [Authorize(Roles = "Tenant")]
-    [HttpPost]
-    public async Task<IActionResult> Create([FromBody] CreateBookingRequest request)
-    {
-        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var tenant = await _tenantRepository.GetByUserIdAsync(userId);
-        if (tenant is null)
-            return BadRequest(new { message = "No tenant profile found for this account. Complete tenant registration first." });
+    //[Authorize(Roles = "Tenant")]
+    //[HttpPost]
+    //public async Task<IActionResult> Create([FromBody] CreateBookingRequest request)
+    //{
+    //    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+    //    var tenant = await _tenantRepository.GetByUserIdAsync(userId);
+    //    if (tenant is null)
+    //        return BadRequest(new { message = "No tenant profile found for this account. Complete tenant registration first." });
 
-        var id = await _bookingRepository.CreateAsync(tenant.Id, request);
-        return CreatedAtAction(nameof(GetById), new { id }, new { id });
-    }
+    //    var id = await _bookingRepository.CreateAsync(tenant.Id, request);
+    //    return CreatedAtAction(nameof(GetById), new { id }, new { id });
+    //}
 
     [Authorize(Roles = "Tenant")]
     [HttpGet("my-bookings")]
     public async Task<IActionResult> GetMyBookings()
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-        var tenant = await _tenantRepository.GetByUserIdAsync(userId);
-        if (tenant is null) return Ok(Array.Empty<BookingResponse>());
 
-        var bookings = await _bookingRepository.GetByTenantIdAsync(tenant.Id);
+        var bookings = await _bookingRepository.GetByUserIdAsync(userId);
+
         return Ok(bookings);
     }
 
@@ -54,9 +53,19 @@ public class BookingController : ControllerBase
 
     [Authorize(Roles = "Owner")]
     [HttpPut("{id}/status")]
-    public async Task<IActionResult> UpdateStatus(int id, [FromBody] UpdateBookingStatusRequest request)
+    public async Task<IActionResult> UpdateStatus(
+    int id,
+    [FromBody] UpdateBookingStatusRequest request)
     {
-        await _bookingRepository.UpdateStatusAsync(id, request.Status);
+        if (request.Status == "Confirmed")
+        {
+            await _bookingRepository.ApproveBookingAsync(id);
+        }
+        else
+        {
+            await _bookingRepository.UpdateStatusAsync(id, request.Status);
+        }
+
         return NoContent();
     }
 
@@ -68,4 +77,22 @@ public class BookingController : ControllerBase
         var bookings = await _bookingRepository.GetByOwnerIdAsync(ownerId);
         return Ok(bookings);
     }
+
+    [Authorize(Roles = "Tenant")]
+    [HttpPost]
+    public async Task<IActionResult> Create(
+    [FromBody] CreateBookingRequest request)
+    {
+        var userId =
+            User.FindFirstValue(
+                ClaimTypes.NameIdentifier)!;
+
+        var id =
+            await _bookingRepository.CreateAsync(
+                userId,
+                request);
+
+        return Ok(new { id });
+    }
+
 }

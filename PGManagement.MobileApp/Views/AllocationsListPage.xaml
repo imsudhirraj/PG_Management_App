@@ -5,38 +5,111 @@
              xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
              x:Class="PGManagement.MobileApp.Views.AllocationsListPage"
              x:DataType="vm:AllocationsListViewModel"
-             Title="Room Allocations">
+             Title="Space Management"
+             BackgroundColor="#F8F9FA">
 
-    <Grid RowDefinitions="Auto,Auto,*" Padding="16" RowSpacing="10">
-        <Label Grid.Row="0" Text="Select PG:" FontAttributes="Bold" />
-        <Picker Grid.Row="1" ItemsSource="{Binding MyPGs}" ItemDisplayBinding="{Binding Name}"
-                SelectedItem="{Binding SelectedPG}" />
+    <Grid RowDefinitions="Auto,*" Padding="16" RowSpacing="16">
 
-        <RefreshView Grid.Row="2" Command="{Binding LoadAllocationsCommand}" IsRefreshing="{Binding IsBusy}">
-            <Grid>
-                <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                       HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+        <!-- Structural Input Deck -->
+        <Border Grid.Row="0" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+            <Border.Shadow>
+                <Shadow Offset="0,4" Radius="12" Brush="#0A000000" Opacity="0.5"/>
+            </Border.Shadow>
 
-                <CollectionView ItemsSource="{Binding Allocations}">
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:AllocationOverviewResponse">
-                            <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                                <VerticalStackLayout Spacing="4">
-                                    <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" />
-                                    <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="13" TextColor="Gray" />
-                                    <HorizontalStackLayout Spacing="10">
-                                        <Label Text="{Binding AllocatedFrom, StringFormat='From {0:dd MMM yyyy}'}" FontSize="12" TextColor="Gray" />
-                                        <Label Text="Active" TextColor="Green" FontAttributes="Bold" FontSize="12"
-                                               IsVisible="{Binding IsActive}" />
-                                        <Label Text="Vacated" TextColor="Gray" FontSize="12"
-                                               IsVisible="{Binding IsActive, Converter={StaticResource InvertedBoolConverter}}" />
-                                    </HorizontalStackLayout>
-                                </VerticalStackLayout>
-                            </Border>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                </CollectionView>
-            </Grid>
-        </RefreshView>
+            <VerticalStackLayout Spacing="12">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Estates Control Target" FontSize="11" FontAttributes="Bold" TextColor="#4A154B" CharacterSpacing="0.5" />
+                    <Border Padding="10,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
+                        <Picker ItemsSource="{Binding MyPGs}" ItemDisplayBinding="{Binding Name}" SelectedItem="{Binding SelectedPG}" HeightRequest="42"/>
+                    </Border>
+                </VerticalStackLayout>
+
+                <BoxView HeightRequest="1" Color="#EDF2F7" Margin="0,2" />
+                <Label Text="Deploy Space Assignment" FontAttributes="Bold" FontSize="14" TextColor="#4A154B" />
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                    <VerticalStackLayout Grid.Column="0" Spacing="4">
+                        <Label Text="Target Room Location" FontSize="11" FontAttributes="Bold" TextColor="#8D96A0" />
+                        <Border Padding="10,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
+                            <Picker ItemsSource="{Binding Rooms}" SelectedItem="{Binding SelectedRoom}" HeightRequest="42">
+                                <Picker.ItemDisplayBinding>
+                                    <Binding Path="RoomNumber" StringFormat="Room {0}" />
+                                </Picker.ItemDisplayBinding>
+                            </Picker>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="4">
+                        <Label Text="Target Entity Profile" FontSize="11" FontAttributes="Bold" TextColor="#8D96A0" />
+                        <Border Padding="10,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
+                            <Picker ItemsSource="{Binding UnallocatedTenants}" ItemDisplayBinding="{Binding FullName}" SelectedItem="{Binding SelectedTenant}" HeightRequest="42"/>
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Margin="0,4,0,0">
+                    <Border Grid.Column="0" Padding="10,2" StrokeShape="RoundRectangle 10" StrokeThickness="1" Stroke="#E2E8F0" BackgroundColor="#F8F9FA">
+                        <DatePicker Date="{Binding AllocatedFrom}" Format="dd MMM yyyy" HeightRequest="42" VerticalOptions="Center"/>
+                    </Border>
+                    <Button Grid.Column="1" Text="Execute Assignment" Command="{Binding AllocateCommand}" WidthRequest="150" HeightRequest="42" BackgroundColor="#4A154B" TextColor="White" FontAttributes="Bold" CornerRadius="10" FontSize="13" />
+                </Grid>
+
+                <Label Text="{Binding AllocateError}" TextColor="#E74C3C" FontSize="12" HorizontalTextAlignment="Center" FontAttributes="Italic"
+                       IsVisible="{Binding AllocateError, Converter={StaticResource StringNotEmptyConverter}}" />
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Dynamic Data Feed Registry Area -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <Label Grid.Row="0" Text="Current Assigned Registry" FontAttributes="Bold" FontSize="14" TextColor="#4A154B" Margin="4,4,0,8" />
+
+            <RefreshView Grid.Row="1" Command="{Binding LoadAllocationsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
+                <Grid>
+                    <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}" 
+                           HorizontalOptions="Center" VerticalOptions="Start" Margin="0,30,0,0" TextColor="#A0AEC0" FontAttributes="Italic" FontSize="14"/>
+
+                    <CollectionView ItemsSource="{Binding Allocations}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:AllocationOverviewResponse">
+                                <Border Margin="0,0,0,12" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                                    <Border.Shadow>
+                                        <Shadow Offset="0,2" Radius="6" Brush="#0A000000" Opacity="0.4"/>
+                                    </Border.Shadow>
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                            <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" TextColor="#4A154B" />
+
+                                            <!-- Structural Subtitle Tag Line -->
+                                            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                                <Border BackgroundColor="#EDF2F7" Padding="8,4" StrokeShape="RoundRectangle 6" StrokeThickness="0">
+                                                    <Label Text="{Binding RoomNumber, StringFormat='Room {0}'}" FontSize="11" FontAttributes="Bold" TextColor="#4A154B" />
+                                                </Border>
+                                                <Label Text="{Binding AllocatedFrom, StringFormat='Timeline: {0:dd MMM yyyy}'}" FontSize="12" TextColor="#4A154B" VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+
+                                            <!-- Status Micro-badges -->
+                                            <HorizontalStackLayout Spacing="6" Margin="2,2,0,0">
+                                                <Border BackgroundColor="#E8F8F5" Padding="8,3" StrokeShape="RoundRectangle 4" StrokeThickness="0" IsVisible="{Binding IsActive}">
+                                                    <Label Text="ACTIVE TENANCY" TextColor="#1ABC9C" FontAttributes="Bold" FontSize="10" CharacterSpacing="0.5"/>
+                                                </Border>
+                                                <Border BackgroundColor="#FEF9E7" Padding="8,3" StrokeShape="RoundRectangle 4" StrokeThickness="0" IsVisible="{Binding IsActive, Converter={StaticResource InvertedBoolConverter}}">
+                                                    <Label Text="VACATED ACCOUNT" TextColor="#F39C12" FontAttributes="Bold" FontSize="10" CharacterSpacing="0.5"/>
+                                                </Border>
+                                            </HorizontalStackLayout>
+                                        </VerticalStackLayout>
+
+                                        <!-- Interactive Out-Onboarding Action Target -->
+                                        <Button Grid.Column="1" Text="Vacate Space" FontSize="11" HeightRequest="34" Padding="12,0" BackgroundColor="#4A154B" TextColor="White" FontAttributes="Bold" CornerRadius="8"
+                                                IsVisible="{Binding IsActive}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:AllocationsListViewModel}}, Path=VacateCommand}"
+                                                CommandParameter="{Binding .}" VerticalOptions="Center" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
+            </RefreshView>
+        </Grid>
     </Grid>
 </ContentPage>

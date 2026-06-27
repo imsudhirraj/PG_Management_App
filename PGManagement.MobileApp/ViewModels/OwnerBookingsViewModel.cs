@@ -34,10 +34,50 @@ public partial class OwnerBookingsViewModel : ObservableObject
         finally { IsBusy = false; }
     }
 
+    //[RelayCommand]
+    //private async Task ConfirmBookingAsync(BookingOverviewResponse booking)
+    //{
+    //    var success = await _apiService.PutAsync($"Booking/{booking.Id}/status", new { Status = "Confirmed" });
+    //    if (success) await LoadAsync();
+    //}
+
     [RelayCommand]
-    private async Task ConfirmBookingAsync(BookingOverviewResponse booking)
+    private async Task ApproveBookingAsync(BookingOverviewResponse booking)
     {
-        var success = await _apiService.PutAsync($"Booking/{booking.Id}/status", new { Status = "Confirmed" });
-        if (success) await LoadAsync();
+        bool confirm = await Shell.Current.DisplayAlert(
+            "Approve Booking",
+            $"Approve booking request from {booking.TenantName}?",
+            "Approve",
+            "Cancel");
+
+        if (!confirm)
+            return;
+
+        var success = await _apiService.PutAsync(
+            $"Booking/{booking.Id}/status",
+            new { Status = "Approved" });
+
+        if (success)
+            await LoadAsync();
+    }
+
+    [RelayCommand]
+    private async Task RejectBookingAsync(BookingOverviewResponse booking)
+    {
+        bool confirm = await Shell.Current.DisplayAlert(
+            "Reject Booking",
+            $"Reject booking request from {booking.TenantName}?",
+            "Reject",
+            "Cancel");
+
+        if (!confirm)
+            return;
+
+        var success = await _apiService.PutAsync(
+            $"Booking/{booking.Id}/status",
+            new { Status = "Rejected" });
+
+        if (success)
+            await LoadAsync();
     }
 }

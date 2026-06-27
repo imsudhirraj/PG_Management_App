@@ -26,17 +26,55 @@ public partial class AddPGViewModel : ObservableObject
         try
         {
             var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-            if (status != PermissionStatus.Granted) return;
 
-            var location = await Geolocation.Default.GetLastKnownLocationAsync()
-                           ?? await Geolocation.Default.GetLocationAsync(
-                                  new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10)));
-
-            if (location is not null)
+            if (status != PermissionStatus.Granted)
             {
-                Latitude = location.Latitude.ToString("F6");
-                Longitude = location.Longitude.ToString("F6");
+                await Shell.Current.DisplayAlert(
+                    "Permission Required",
+                    "Location permission is required to get your current location.",
+                    "OK");
+
+                await Launcher.Default.OpenAsync("app-settings:");
+                return;
             }
+
+            Location? location = null;
+
+            try
+            {
+                var request = new GeolocationRequest(
+                    GeolocationAccuracy.High,
+                    TimeSpan.FromSeconds(15));
+
+                location = await Geolocation.Default.GetLocationAsync(request);
+
+                // Fallback
+                location ??= await Geolocation.Default.GetLastKnownLocationAsync();
+            }
+            catch (FeatureNotEnabledException)
+            {
+                await Shell.Current.DisplayAlert(
+                    "GPS Disabled",
+                    "Please enable Location Services (GPS) and try again.",
+                    "OK");
+
+                await Launcher.Default.OpenAsync("app-settings:");
+                return;
+            }
+
+            if (location == null)
+            {
+                await Shell.Current.DisplayAlert(
+                    "Location Unavailable",
+                    "Unable to determine your current location.",
+                    "OK");
+                return;
+            }
+
+            Latitude = location.Latitude.ToString("F6");
+            Longitude = location.Longitude.ToString("F6");
+
+            ErrorMessage = string.Empty;
         }
         catch (Exception ex)
         {

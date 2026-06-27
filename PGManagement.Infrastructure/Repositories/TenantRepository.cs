@@ -29,6 +29,15 @@ public class TenantRepository : ITenantRepository
             commandType: CommandType.StoredProcedure);
     }
 
+    public async Task<IEnumerable<TenantWithRoomResponse>> GetUnallocatedByOwnerIdAsync(string ownerId)
+    {
+        using var connection = _connectionFactory.CreateConnection();
+        return await connection.QueryAsync<TenantWithRoomResponse>(
+            "dbo.sp_Tenant_GetUnallocatedByOwnerId",
+            new { OwnerId = ownerId },
+            commandType: CommandType.StoredProcedure
+        );
+    }
     public async Task<IEnumerable<TenantWithRoomResponse>> GetByOwnerIdAsync(string ownerId)
     {
         using var connection = _connectionFactory.CreateConnection();

@@ -1,77 +1,78 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
 	<PropertyGroup>
 		<TargetFrameworks>net9.0-android;net9.0-ios;net9.0-maccatalyst</TargetFrameworks>
 		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">
 			$(TargetFrameworks);net9.0-windows10.0.19041.0
 		</TargetFrameworks>
-
 		<OutputType>Exe</OutputType>
 		<RootNamespace>PGManagement.MobileApp</RootNamespace>
 		<UseMaui>true</UseMaui>
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
-		<ApplicationTitle>KuhuPG</ApplicationTitle>
-		<ApplicationId>com.kuhupg.app</ApplicationId>
-
+		<ApplicationTitle>BUNNY PG</ApplicationTitle>
+		<ApplicationId>com.bunnypg.app</ApplicationId>
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
 		<ApplicationVersion>1</ApplicationVersion>
-
 		<WindowsPackageType>None</WindowsPackageType>
 	</PropertyGroup>
 
-	<!-- ===================== ANDROID DEBUG ===================== -->
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Debug|net9.0-android'">
 		<AndroidKeyStore>False</AndroidKeyStore>
 	</PropertyGroup>
 
-	<!-- ===================== ANDROID RELEASE (SIGNED) ===================== -->
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)'=='Release|net9.0-android'">
-
-		<!-- Packaging -->
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 		<AndroidUseAapt2>true</AndroidUseAapt2>
 		<AndroidCreatePackagePerAbi>false</AndroidCreatePackagePerAbi>
-
-		<!-- Stability fixes -->
 		<AndroidEnableResourceShrinking>false</AndroidEnableResourceShrinking>
 		<AndroidEnableAssemblyCompression>false</AndroidEnableAssemblyCompression>
 		<AndroidUseZipAlign>true</AndroidUseZipAlign>
-
-		<!-- 🔐 SIGNING CONFIG -->
 		<AndroidKeyStore>True</AndroidKeyStore>
-
 		<AndroidSigningKeyStore>kuhupg.keystore</AndroidSigningKeyStore>
 		<AndroidSigningStorePass>Monalika@12#</AndroidSigningStorePass>
-
 		<AndroidSigningKeyAlias>kuhupg</AndroidSigningKeyAlias>
 		<AndroidSigningKeyPass>Monalika@12#</AndroidSigningKeyPass>
-
 	</PropertyGroup>
 
-	<!-- ===================== RESOURCES ===================== -->
 	<ItemGroup>
-		<MauiIcon Include="Resources\AppIcon\appicon.svg"
-				  ForegroundFile="Resources\AppIcon\appiconfg.svg"
-				  Color="#512BD4" />
-
-		<MauiSplashScreen Include="Resources\Splash\splash.svg"
-						  Color="#512BD4"
-						  BaseSize="128,128" />
-
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" />
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 		<MauiImage Include="Resources\Images\*" />
 		<MauiFont Include="Resources\Fonts\*" />
-		<MauiAsset Include="Resources\Raw\**"
-				   LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
+		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 
-	<!-- ===================== PACKAGES ===================== -->
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="$(MauiVersion)" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.9" />
+		<PackageReference Include="QRCoder" Version="1.8.0" />
+		<PackageReference Include="ZXing.Net.Maui" Version="0.5.0" />
+		<PackageReference Include="ZXing.Net.Maui.Controls" Version="0.5.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+		<MauiXaml Update="Views\OwnerKycPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\OwnerPaymentSettingsPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\OwnerRevenuePage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\PGTenantDetailPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\TenantChatPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\TenantKycPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\TenantPaymentPage.xaml">
+			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+	</ItemGroup>
 </Project>

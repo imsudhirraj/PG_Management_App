@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 //using IntelliJ.Lang.Annotations;
 using PGManagement.MobileApp.Models;
 using PGManagement.MobileApp.Services;
+using PGManagement.MobileApp.Views;
 
 namespace PGManagement.MobileApp.ViewModels;
 
@@ -38,4 +39,20 @@ public partial class DashboardViewModel : ObservableObject
     [RelayCommand] private async Task GoToComplaintsAsync() => await Shell.Current.GoToAsync("OwnerComplaintsPage");
     [RelayCommand] private async Task GoToBookingsAsync() => await Shell.Current.GoToAsync("OwnerBookingsPage");
     [RelayCommand] private async Task GoToNoticesAsync() => await Shell.Current.GoToAsync("OwnerNoticesPage");
+    [RelayCommand] private async Task GoToTenantAsync() => await Shell.Current.GoToAsync("TenantListPage");
+    [RelayCommand]
+    private async Task NavigateToKycAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(OwnerKycPage));
+    }
+    [RelayCommand]
+    private async Task PaymentSettingsAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(OwnerPaymentSettingsPage));
+    }
+    [RelayCommand]
+    private async Task GoToRevenueAsync()
+    {
+        await Shell.Current.GoToAsync(nameof(OwnerRevenuePage));
+    }
 }

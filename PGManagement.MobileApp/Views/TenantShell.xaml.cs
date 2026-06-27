@@ -5,6 +5,8 @@ public partial class TenantShell : Shell
     public TenantShell()
     {
         InitializeComponent();
+        Routing.RegisterRoute("PGTenantDetailPage", typeof(Views.PGTenantDetailPage));
+
     }
     protected override bool OnBackButtonPressed()
     {

@@ -1,4 +1,6 @@
-﻿namespace PGManagement.MobileApp.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+
+namespace PGManagement.MobileApp.Models;
 
 public class BookingResponse
 {
@@ -9,4 +11,5 @@ public class BookingResponse
     public string PGName { get; set; } = string.Empty;
     public DateTime BookingDate { get; set; }
     public string Status { get; set; } = string.Empty;
+
 }

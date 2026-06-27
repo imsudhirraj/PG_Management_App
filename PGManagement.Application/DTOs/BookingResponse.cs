@@ -15,4 +15,14 @@ public class BookingResponse
     public string PGName { get; set; } = string.Empty;
     public DateTime BookingDate { get; set; }
     public string Status { get; set; } = string.Empty;
+    public string? Message { get; set; }
+
+    public bool CanUploadKyc =>
+    Status == "Approved";
+
+    public bool CanPay =>
+        Status == "Approved";
+
+    public bool CanChat =>
+        Status == "Approved";
 }

@@ -5,31 +5,40 @@
              xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
              x:Class="PGManagement.MobileApp.Views.MyPGsPage"
              x:DataType="vm:MyPGsViewModel"
-             Title="My PGs">
+             Title="Estate Portfolio"
+             BackgroundColor="#F8F9FA">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="+ Add" Command="{Binding GoToAddPGCommand}" />
+        <ToolbarItem Text="➕ Add New" Command="{Binding GoToAddPGCommand}" />
     </ContentPage.ToolbarItems>
 
-    <RefreshView Command="{Binding LoadMyPGsCommand}" IsRefreshing="{Binding IsBusy}">
-        <Grid Padding="16">
+    <RefreshView Command="{Binding LoadMyPGsCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
+        <Grid Padding="20">
             <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" TextColor="#A0AEC0" FontAttributes="Italic" />
 
             <CollectionView ItemsSource="{Binding MyPGs}" SelectionMode="Single" SelectionChanged="OnPGSelected">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:PGResponse">
-                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                            <VerticalStackLayout Spacing="4">
-                                <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" />
-                                <Label Text="{Binding Address}" FontSize="13" TextColor="Gray" />
-                                <Label Text="{Binding City}" FontSize="13" TextColor="Gray" />
-                            </VerticalStackLayout>
+                        <Border Margin="0,0,0,12" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                            <Border.Shadow>
+                                <Shadow Offset="0,2" Radius="6" Brush="#0A000000" Opacity="0.4"/>
+                            </Border.Shadow>
+
+                            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="18" TextColor="#1A1A1A" />
+                                    <Label Text="{Binding Address}" FontSize="13" TextColor="#718096" />
+                                </VerticalStackLayout>
+
+                                <Border Grid.Column="1" BackgroundColor="#EBF4FF" Padding="10,4" StrokeShape="RoundRectangle 8" StrokeThickness="0" VerticalOptions="Center">
+                                    <Label Text="{Binding City}" FontSize="11" FontAttributes="Bold" TextColor="#2B6CB0" CharacterSpacing="0.5"/>
+                                </Border>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-            
         </Grid>
     </RefreshView>
 </ContentPage>

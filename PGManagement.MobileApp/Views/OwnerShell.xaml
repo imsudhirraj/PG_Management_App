@@ -8,7 +8,7 @@
     <TabBar>
         <ShellContent Title="Dashboard" ContentTemplate="{DataTemplate views:DashboardPage}" Route="DashboardPage" />
         <ShellContent Title="My PGs" ContentTemplate="{DataTemplate views:MyPGsPage}" Route="MyPGsPage" />
-        <ShellContent Title="Tenants" ContentTemplate="{DataTemplate views:TenantListPage}" Route="TenantListPage" />
+        <!--<ShellContent Title="Tenants" ContentTemplate="{DataTemplate views:TenantListPage}" Route="TenantListPage" />-->
         <ShellContent Title="Profile" ContentTemplate="{DataTemplate views:ProfilePage}" Route="ProfilePage" />
     </TabBar>
 

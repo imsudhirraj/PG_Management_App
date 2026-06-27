@@ -5,25 +5,36 @@
              xmlns:models="clr-namespace:PGManagement.MobileApp.Models"
              x:Class="PGManagement.MobileApp.Views.OwnerPaymentsPage"
              x:DataType="vm:OwnerPaymentsViewModel"
-             Title="Payments">
+             Title="Revenue Audits"
+             BackgroundColor="#F8F9FA">
 
-    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}">
-        <Grid Padding="16">
+    <RefreshView Command="{Binding LoadCommand}" IsRefreshing="{Binding IsBusy}" RefreshColor="#512BD4">
+        <Grid Padding="20">
             <Label Text="{Binding StatusMessage}" IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
-                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" />
+                   HorizontalOptions="Center" VerticalOptions="Start" Margin="0,20,0,0" TextColor="#A0AEC0" FontAttributes="Italic" />
 
             <CollectionView ItemsSource="{Binding Payments}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="models:PaymentOverviewResponse">
-                        <Border Margin="0,0,0,10" Padding="14" StrokeShape="RoundRectangle 12" Stroke="LightGray">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                    <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" />
-                                    <Label Text="{Binding Type}" FontSize="12" TextColor="Gray" />
-                                    <Label Text="{Binding PaymentDate, StringFormat='{0:dd MMM yyyy}'}" FontSize="12" TextColor="Gray" />
+                        <Border Margin="0,0,0,12" Padding="16" StrokeShape="RoundRectangle 16" StrokeThickness="0" BackgroundColor="White">
+                            <Border.Shadow>
+                                <Shadow Offset="0,2" Radius="6" Brush="#0A000000" Opacity="0.4"/>
+                            </Border.Shadow>
+
+                            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                <VerticalStackLayout Grid.Column="0" Spacing="6">
+                                    <Label Text="{Binding TenantName}" FontAttributes="Bold" FontSize="16" TextColor="#1A1A1A" />
+
+                                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                                        <Border BackgroundColor="#E8F8F5" Padding="6,3" StrokeShape="RoundRectangle 4" StrokeThickness="0">
+                                            <Label Text="{Binding Type}" FontSize="10" FontAttributes="Bold" TextColor="#1ABC9C" CharacterSpacing="0.5"/>
+                                        </Border>
+                                        <Label Text="{Binding PaymentDate, StringFormat='{0:dd MMM yyyy}'}" FontSize="12" TextColor="#718096" VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
                                 </VerticalStackLayout>
+
                                 <Label Grid.Column="1" Text="{Binding Amount, StringFormat='₹{0:N0}'}"
-                                       FontAttributes="Bold" FontSize="18" VerticalOptions="Center" />
+                                       FontAttributes="Bold" FontSize="20" TextColor="#2ECC71" VerticalOptions="Center" />
                             </Grid>
                         </Border>
                     </DataTemplate>

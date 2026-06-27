@@ -17,5 +17,7 @@ namespace PGManagement.Application.DTOs
         public string PGName { get; set; } = string.Empty;
         public DateTime BookingDate { get; set; }
         public string Status { get; set; } = string.Empty;
+        public bool CanApprove => Status == "Pending";
+        public string? Message { get; set; }
     }
 }

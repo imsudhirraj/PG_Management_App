@@ -39,6 +39,15 @@ public class TenantController : ControllerBase
     }
 
     [Authorize(Roles = "Owner")]
+    [HttpGet("unallocated")]
+    public async Task<IActionResult> GetUnallocatedTenants()
+    {
+        var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+        var unallocatedTenants = await _tenantRepository.GetUnallocatedByOwnerIdAsync(ownerId);
+        return Ok(unallocatedTenants);
+    }
+
+    [Authorize(Roles = "Owner")]
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateTenantRequest request)
     {

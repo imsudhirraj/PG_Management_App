@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewmodels="clr-namespace:PGManagement.MobileApp.ViewModels"
+    xmlns:model="clr-namespace:PGManagement.MobileApp.Models"
+    x:Class="PGManagement.MobileApp.Views.OwnerRevenuePage"
+    x:DataType="viewmodels:OwnerRevenueViewModel"
+    Title="Revenue Hub"
+    BackgroundColor="#F5F7FB">
+
+    <RefreshView
+        Command="{Binding LoadCommand}"
+        IsRefreshing="{Binding IsBusy}">
+
+        <Grid>
+
+            <CollectionView
+                ItemsSource="{Binding Payments}"
+                SelectionMode="None"
+                Margin="15">
+
+                <CollectionView.EmptyView>
+
+                    <VerticalStackLayout
+                        VerticalOptions="Center"
+                        HorizontalOptions="Center"
+                        Spacing="15">
+
+                        <Label
+                            Text="💰"
+                            FontSize="60"
+                            HorizontalOptions="Center"/>
+
+                        <Label
+                            Text="{Binding StatusMessage}"
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            TextColor="Gray"/>
+
+                    </VerticalStackLayout>
+
+                </CollectionView.EmptyView>
+
+                <CollectionView.ItemTemplate>
+
+                    <DataTemplate
+                        x:DataType="model:PaymentOverviewResponse">
+
+                        <Frame
+                            Margin="0,0,0,18"
+                            Padding="18"
+                            CornerRadius="18"
+                            HasShadow="True"
+                            BorderColor="#E6EAF2"
+                            BackgroundColor="White">
+
+                            <VerticalStackLayout
+                                Spacing="14">
+
+                                <!-- Header -->
+
+                                <Grid
+                                    ColumnDefinitions="*,Auto">
+
+                                    <VerticalStackLayout>
+
+                                        <Label
+                                            Text="{Binding TenantName}"
+                                            FontSize="20"
+                                            FontAttributes="Bold"/>
+
+                                        <Label
+                                            Text="{Binding Email}"
+                                            TextColor="Gray"/>
+
+                                    </VerticalStackLayout>
+
+                                    <Border
+                                        Grid.Column="1"
+                                        Padding="10,4"
+                                        StrokeShape="RoundRectangle 15"
+                                        BackgroundColor="#FFF3CD">
+
+                                        <Label
+                                            Text="{Binding Status}"
+                                            TextColor="#B45309"
+                                            FontAttributes="Bold"/>
+
+                                    </Border>
+
+                                </Grid>
+
+                                <!-- Amount -->
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*">
+
+                                    <Label
+                                        Text="Amount :"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding Amount,StringFormat='₹ {0:F2}'}"
+                                        TextColor="#16A34A"
+                                        FontSize="18"
+                                        FontAttributes="Bold"/>
+
+                                </Grid>
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*">
+
+                                    <Label
+                                        Text="Payment Type :"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding Type}"/>
+
+                                </Grid>
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*">
+
+                                    <Label
+                                        Text="Method :"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding PaymentMethod}"/>
+
+                                </Grid>
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*">
+
+                                    <Label
+                                        Text="Transaction ID :"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding TransactionId}"
+                                        LineBreakMode="CharacterWrap"/>
+
+                                </Grid>
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*">
+
+                                    <Label
+                                        Text="PG :"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding PGName}"/>
+
+                                </Grid>
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*">
+
+                                    <Label
+                                        Text="Room :"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding RoomNumber}"/>
+
+                                </Grid>
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*">
+
+                                    <Label
+                                        Text="Address :"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding Address}"/>
+
+                                </Grid>
+
+                                <Grid
+                                    ColumnDefinitions="Auto,*">
+
+                                    <Label
+                                        Text="Date :"
+                                        FontAttributes="Bold"/>
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Text="{Binding PaymentDate,StringFormat='{0:dd MMM yyyy hh:mm tt}'}"/>
+
+                                </Grid>
+
+                                <!-- Screenshot -->
+
+                                <Button
+                                    Text="📷 View Payment Screenshot"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewScreenshotCommand}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="#2563EB"
+                                    TextColor="White"
+                                    CornerRadius="12"
+                                    HeightRequest="48"/>
+
+                                <!-- Approve Reject -->
+
+                                <Grid
+                                    ColumnDefinitions="*,*"
+                                    ColumnSpacing="15">
+
+                                    <Button
+                                        Grid.Column="0"
+                                        Text="Approve"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ApproveCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#16A34A"
+                                        TextColor="White"
+                                        CornerRadius="12"
+                                        HeightRequest="50"/>
+
+                                    <Button
+                                        Grid.Column="1"
+                                        Text="Reject"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RejectCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#DC2626"
+                                        TextColor="White"
+                                        CornerRadius="12"
+                                        HeightRequest="50"/>
+
+                                </Grid>
+
+                            </VerticalStackLayout>
+
+                        </Frame>
+
+                    </DataTemplate>
+
+                </CollectionView.ItemTemplate>
+
+            </CollectionView>
+
+            <ActivityIndicator
+                IsVisible="{Binding IsBusy}"
+                IsRunning="{Binding IsBusy}"
+                VerticalOptions="Center"
+                HorizontalOptions="Center"
+                WidthRequest="60"
+                HeightRequest="60"/>
+
+        </Grid>
+
+    </RefreshView>
+
+</ContentPage>
