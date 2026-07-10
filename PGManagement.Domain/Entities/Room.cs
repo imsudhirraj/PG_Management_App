@@ -13,6 +13,11 @@ public class Room : BaseEntity
     public int TotalBeds { get; set; }
     public decimal RentAmount { get; set; }
     public RoomStatus Status { get; set; } = RoomStatus.Vacant;
+    public int Floor { get; set; }
+
+    public decimal SecurityDeposit { get; set; }
+
+    public string? Description { get; set; }
 
     public ICollection<RoomAllocation> Allocations { get; set; } = new List<RoomAllocation>();
 

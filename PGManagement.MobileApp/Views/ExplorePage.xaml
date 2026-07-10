@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:PGManagement.MobileApp.ViewModels;assembly=PGManagement.MobileApp"
+             xmlns:models="clr-namespace:PGManagement.MobileApp.Models;assembly=PGManagement.MobileApp"
+             x:Class="PGManagement.MobileApp.Views.ExplorePage"
+             Title="Explore"
+             BackgroundColor="#F5EEF6"
+             ControlTemplate="{StaticResource GlobalJourneyTemplate}"
+             x:DataType="viewmodels:ExploreViewModel"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto, Auto, Auto, *" Padding="20,24,20,90" RowSpacing="16">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="4" Margin="0,12,0,0">
+            <Label Text="Discover PGs" FontSize="26" FontAttributes="Bold" TextColor="#2D0B30" />
+            <Label Text="{Binding ResultSummary}" FontSize="13" TextColor="#631D64" />
+        </VerticalStackLayout>
+
+        <ScrollView Grid.Row="1" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="0,2,0,2">
+            <CollectionView ItemsSource="{Binding GenderOptions}" SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border Padding="16,8" StrokeThickness="0" BackgroundColor="#4A154B">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="20"/>
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ExploreViewModel}}, Path=ApplyFacetedFiltersCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <Label Text="{Binding .}" FontSize="12" FontAttributes="Bold" VerticalOptions="Center" TextColor="White" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <ScrollView Grid.Row="2" Orientation="Horizontal" HorizontalScrollBarVisibility="Never" Margin="0,0,0,4">
+            <CollectionView ItemsSource="{Binding PriceOptions}" SelectionMode="None">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Horizontal" ItemSpacing="8" />
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="x:String">
+                        <Border Padding="14,8" StrokeThickness="1" Stroke="#E2CCD3" BackgroundColor="White">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="12"/>
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ExploreViewModel}}, Path=ApplyPriceFilterCommand}"
+                                    CommandParameter="{Binding .}" />
+                            </Border.GestureRecognizers>
+                            <Label Text="{Binding .}" FontSize="12" FontAttributes="Bold" VerticalOptions="Center" TextColor="#4A154B" />
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+
+        <CollectionView Grid.Row="3" ItemsSource="{Binding FilteredProperties}" SelectionMode="None">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout Orientation="Vertical" ItemSpacing="14"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:PGCardResponse">
+                    <Border BackgroundColor="White" StrokeThickness="1" Stroke="#E9ECEF" HeightRequest="145">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="16"/>
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="#0F000000" Offset="0,4" Radius="10"/>
+                        </Border.Shadow>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer 
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ExploreViewModel}}, Path=GoToDetailsAsyncCommand}"
+                                CommandParameter="{Binding .}" />
+                        </Border.GestureRecognizers>
+
+                        <Grid ColumnDefinitions="130, *">
+                            <Border Grid.Column="0" StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="16,0,16,0"/>
+                                </Border.StrokeShape>
+                                <Grid>
+                                    <Image Source="{Binding DisplayImage, TargetNullValue='bunny_logo.png', FallbackValue='bunny_logo.png'}" 
+                                           Aspect="AspectFill"
+                                           BackgroundColor="#F5EEF6"/>
+
+                                    <Border HorizontalOptions="Start" VerticalOptions="Start" Margin="8" Padding="6,2" BackgroundColor="#22C55E" StrokeThickness="0" IsVisible="{Binding ShowVerified}">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="4"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="VERIFIED" FontSize="8" FontAttributes="Bold" TextColor="White"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <Grid Grid.Column="1" RowDefinitions="*, Auto" Padding="14,12">
+                                <VerticalStackLayout Grid.Row="0" Spacing="3">
+                                    <Label Text="{Binding Name}" FontAttributes="Bold" FontSize="15" LineBreakMode="TailTruncation" MaxLines="1" TextColor="#212529"/>
+
+                                    <Label Text="{Binding Address}" FontSize="11" LineBreakMode="TailTruncation" MaxLines="1" TextColor="#6C757D"/>
+
+                                    <HorizontalStackLayout Spacing="6" Margin="0,2,0,0" VerticalOptions="Center">
+                                        <Label Text="★" TextColor="#EAB308" FontSize="11" VerticalOptions="Center"/>
+                                        <Label Text="{Binding RatingText}" FontSize="11" TextColor="#495057" FontAttributes="Bold" VerticalOptions="Center"/>
+                                        <Label Text="•" TextColor="#E2CCD3" VerticalOptions="Center"/>
+                                        <Label Text="{Binding DistanceKm, StringFormat='{0:F1} km away'}" FontSize="11" TextColor="#6C757D" VerticalOptions="Center"/>
+                                        <Label Text="•" TextColor="#E2CCD3" VerticalOptions="Center"/>
+                                        <Label Text="{Binding AvailableBeds, StringFormat='{0} beds left'}" FontSize="11" FontAttributes="Bold" TextColor="#198754" VerticalOptions="Center"/>
+                                    </HorizontalStackLayout>
+
+                                    <Label Text="{Binding DepositAmount, StringFormat='Security Deposit: ₹{0:N0}'}" FontSize="11" TextColor="#868E96" Margin="0,1,0,0"/>
+                                </VerticalStackLayout>
+
+                                <Grid Grid.Row="1" ColumnDefinitions="*, Auto" VerticalOptions="End">
+                                    <Label Grid.Column="0" Text="{Binding RentText}" FontAttributes="Bold" FontSize="15" TextColor="#4A154B" VerticalOptions="Center"/>
+
+                                    <Border Grid.Column="1" BackgroundColor="#F5EEF6" StrokeThickness="0" Padding="8,4">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="6"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding GenderType}" FontSize="10" TextColor="#4A154B" FontAttributes="Bold"/>
+                                    </Border>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

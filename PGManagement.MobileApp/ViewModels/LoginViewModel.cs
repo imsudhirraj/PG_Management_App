@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-//using IntelliJ.Lang.Annotations;
 using PGManagement.MobileApp.Services;
 
 namespace PGManagement.MobileApp.ViewModels;
 
+[QueryProperty(nameof(TargetRoute), "TargetRoute")]
 public partial class LoginViewModel : ObservableObject
 {
     private readonly IAuthService _authService;
@@ -13,6 +13,14 @@ public partial class LoginViewModel : ObservableObject
     [ObservableProperty] private string password = string.Empty;
     [ObservableProperty] private string errorMessage = string.Empty;
     [ObservableProperty] private bool isBusy;
+
+    // Manually define the property to completely avoid source generator timing errors
+    private string _targetRoute = string.Empty;
+    public string TargetRoute
+    {
+        get => _targetRoute;
+        set => SetProperty(ref _targetRoute, value);
+    }
 
     public LoginViewModel(IAuthService authService) => _authService = authService;
 
@@ -43,17 +51,34 @@ public partial class LoginViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task GoToRegisterAsync() => await Shell.Current.GoToAsync("RegisterPage");
+    private async Task GoToRegisterAsync()
+    {
+        string routeParam = !string.IsNullOrWhiteSpace(TargetRoute)
+            ? $"?TargetRoute={System.Uri.EscapeDataString(TargetRoute)}"
+            : string.Empty;
+
+        await Shell.Current.GoToAsync($"RegisterPage{routeParam}");
+    }
+
     private async Task NavigateToRoleHomeAsync(string? role)
     {
-        var newRoot = role switch
+        MainThread.BeginInvokeOnMainThread(() =>
         {
-            "Owner" => (Page)new Views.OwnerShell(),
-            "Tenant" => new Views.TenantShell(),
-            _ => new AppShell()
-        };
+            Shell newShell = role switch
+            {
+                "Owner" => new Views.OwnerShell(),
 
-        Application.Current!.Windows[0].Page = newRoot;
+                // Pass the custom route explicitly into the shell constructor
+                "Tenant" => new AppShell(TargetRoute),
+
+                _ => new AppShell(TargetRoute)
+            };
+
+            // This instantly assigns the pre-routed shell instance as the primary UI root
+            Application.Current!.MainPage = newShell;
+        });
+
+        await Task.CompletedTask;
     }
 
     private static T CreateShell<T>() where T : Shell, new() => new T();

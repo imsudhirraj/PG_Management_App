@@ -4,6 +4,7 @@
              xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
              x:Class="PGManagement.MobileApp.Views.LoginPage"
              x:DataType="vm:LoginViewModel"
+             ControlTemplate="{StaticResource GlobalJourneyTemplate}"
              BackgroundColor="White"
              Shell.NavBarIsVisible="False">
     <ScrollView VerticalOptions="Center">

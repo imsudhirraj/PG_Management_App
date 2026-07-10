@@ -1,22 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
-
-    <g fill="none" stroke="#FFFFFF" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
-
-        <!-- Bunny Ears -->
-        <path d="M390 180 L390 420 L500 540"></path>
-        <path d="M634 180 L634 420 L524 540"></path>
-
-        <!-- Roof -->
-        <path d="M340 470 L512 340 L684 470"></path>
-
-        <!-- Face -->
-        <path d="M420 560 L420 720 L512 800 L604 720 L604 560"></path>
-
-        <!-- Nose -->
-        <path d="M512 650 L512 730"></path>
-        <path d="M512 730 L480 700"></path>
-        <path d="M512 730 L544 700"></path>
-
-    </g>
-
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+	<g fill="none" stroke="#FFFFFF" stroke-width="40" stroke-linecap="round" stroke-linejoin="round">
+		<path d="M390 180 L390 420 L500 540"/>
+		<path d="M634 180 L634 420 L524 540"/>
+		<path d="M340 470 L512 340 L684 470"/>
+		<path d="M420 560 L420 720 L512 800 L604 720 L604 560"/>
+		<path d="M512 650 L512 730"/>
+		<path d="M512 730 L480 700"/>
+		<path d="M512 730 L544 700"/>
+	</g>
 </svg>

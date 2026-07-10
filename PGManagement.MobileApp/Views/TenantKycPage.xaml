@@ -1,60 +1,101 @@
 <?xml version="1.0" encoding="utf-8" ?>
-
-<ContentPage
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
-    x:Class="PGManagement.MobileApp.Views.TenantKycPage"
-    x:DataType="vm:TenantKycViewModel"
-    Title="Upload KYC">
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:PGManagement.MobileApp.ViewModels"
+             x:Class="PGManagement.MobileApp.Views.TenantKycPage"
+             x:DataType="vm:TenantKycViewModel"
+             ControlTemplate="{StaticResource GlobalJourneyTemplate}"
+             Title="Upload KYC"
+             BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#121212}">
 
     <ScrollView>
+        <!-- Bottom padding at 80 ensures input areas remain completely clear of any tab overlays -->
+        <VerticalStackLayout Padding="20,16,20,80" Spacing="16" VerticalOptions="Start">
 
-        <VerticalStackLayout
-            Padding="20"
-            Spacing="15">
+            <!-- Page Introduction Summary -->
+            <VerticalStackLayout Spacing="2">
+                <Label Text="KYC Verification" FontSize="26" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1E293B, Dark=White}"/>
+                <Label Text="Please submit a valid government ID to verify your profile safety status." FontSize="13" TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}"/>
+            </VerticalStackLayout>
 
-            <Label
-                Text="KYC Verification"
-                FontSize="24"
-                FontAttributes="Bold"/>
+            <!-- Dropdown Selection Container Layer -->
+            <VerticalStackLayout Spacing="6">
+                <Label Text="Select Document Type" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#4A154B, Dark=#E2A4E4}" Margin="2,0,0,0" />
 
-            <Picker
-                Title="Document Type"
-                SelectedItem="{Binding SelectedDocumentType}">
+                <Border Padding="12,0" StrokeThickness="1" Stroke="{AppThemeBinding Light=#E2E8F0, Dark=#2D2D2D}" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="8"/>
+                    </Border.StrokeShape>
 
-                <Picker.ItemsSource>
-                    <x:Array Type="{x:Type x:String}">
-                        <x:String>Aadhaar</x:String>
-                        <x:String>PAN</x:String>
-                        <x:String>Passport</x:String>
-                        <x:String>Driving License</x:String>
-                    </x:Array>
-                </Picker.ItemsSource>
+                    <Picker Title="Choose options..."
+                            TitleColor="{AppThemeBinding Light=#94A3B8, Dark=#64748B}"
+                            TextColor="{AppThemeBinding Light=#1E293B, Dark=White}"
+                            FontSize="14"
+                            HeightRequest="44"
+                            SelectedItem="{Binding SelectedDocumentType}">
+                        <Picker.ItemsSource>
+                            <x:Array Type="{x:Type x:String}">
+                                <x:String>Aadhaar</x:String>
+                                <x:String>PAN</x:String>
+                                <x:String>Passport</x:String>
+                                <x:String>Driving License</x:String>
+                            </x:Array>
+                        </Picker.ItemsSource>
+                    </Picker>
+                </Border>
+            </VerticalStackLayout>
 
-            </Picker>
+            <!-- File Attachment Selector Segment -->
+            <Border StrokeThickness="0" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="12"/>
+                </Border.StrokeShape>
+                <Border.Shadow>
+                    <Shadow Brush="#000000" Offset="0,2" Radius="6" Opacity="0.04"/>
+                </Border.Shadow>
 
-            <Button
-    Text="Choose Document"
-    Command="{Binding PickDocumentCommand}" />
+                <Grid RowDefinitions="Auto, Auto" Padding="14" RowSpacing="10">
+                    <Button Grid.Row="0"
+                            Text="Select Document File"
+                            FontAttributes="Bold"
+                            HeightRequest="40"
+                            FontSize="13"
+                            CornerRadius="6"
+                            BackgroundColor="{AppThemeBinding Light=#334155, Dark=#475569}"
+                            TextColor="White"
+                            Command="{Binding PickDocumentCommand}" />
 
-            <Label
-    Text="{Binding SelectedFileName}"
-    FontSize="12"
-    TextColor="Gray" />
+                    <!-- Status Label indicator inside the file drop container -->
+                    <Label Grid.Row="1"
+                           Text="{Binding SelectedFileName, FallbackValue='No document attached yet'}"
+                           FontSize="12"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Light=#64748B, Dark=#94A3B8}"
+                           LineBreakMode="TailTruncation"
+                           FontAttributes="Italic"/>
+                </Grid>
+            </Border>
 
-            <Button
-                Text="Upload KYC"
-                Command="{Binding UploadKycCommand}"
-                BackgroundColor="#512BD4"
-                TextColor="White"/>
+            <!-- Submission Trigger Button Gateway -->
+            <VerticalStackLayout Spacing="8" Margin="0,10,0,0">
+                <Button Text="Upload Document"
+                        Command="{Binding UploadKycCommand}"
+                        BackgroundColor="#4A154B"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        HeightRequest="46"
+                        CornerRadius="8"
+                        FontSize="14"/>
 
-            <Label
-                Text="{Binding StatusMessage}"
-                TextColor="Red"/>
+                <!-- System Notification/Error Messaging Layer -->
+                <Label Text="{Binding StatusMessage}"
+                       TextColor="#EF4444"
+                       FontSize="12"
+                       HorizontalTextAlignment="Center"
+                       FontAttributes="Italic"
+                       IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}" />
+            </VerticalStackLayout>
 
         </VerticalStackLayout>
-
     </ScrollView>
-
 </ContentPage>

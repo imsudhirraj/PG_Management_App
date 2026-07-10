@@ -2,6 +2,8 @@
 using PGManagement.MobileApp.Services;
 using PGManagement.MobileApp.ViewModels;
 using PGManagement.MobileApp.Views;
+// Import the Community Toolkit namespace
+using CommunityToolkit.Maui;
 
 namespace PGManagement.MobileApp
 {
@@ -12,10 +14,13 @@ namespace PGManagement.MobileApp
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                // Initialize the community toolkit builders here
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("lucide.ttf", "LucideIcons");
                 });
 
             // Services
@@ -47,7 +52,8 @@ namespace PGManagement.MobileApp
             builder.Services.AddTransient<OwnerPaymentSettingsViewModel>();
             builder.Services.AddTransient<TenantPaymentViewModel>();
             builder.Services.AddTransient<OwnerRevenueViewModel>();
-
+            builder.Services.AddSingleton<ExploreViewModel>();
+            builder.Services.AddSingleton<WishlistViewModel>();
 
             // Views
             builder.Services.AddTransient<LoginPage>();
@@ -72,6 +78,8 @@ namespace PGManagement.MobileApp
             builder.Services.AddTransient<OwnerPaymentSettingsPage>();
             builder.Services.AddTransient<TenantPaymentPage>();
             builder.Services.AddTransient<OwnerRevenuePage>();
+            builder.Services.AddSingleton<ExplorePage>();
+            builder.Services.AddSingleton<WishlistPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

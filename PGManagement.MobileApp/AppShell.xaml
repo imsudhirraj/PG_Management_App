@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:views="clr-namespace:PGManagement.MobileApp.Views"
-       x:Class="PGManagement.MobileApp.AppShell">
+<Shell
+    x:Class="PGManagement.MobileApp.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:PGManagement.MobileApp.Views"
+    Shell.NavBarIsVisible="False">
 
-    <ShellContent
-        Title="Login"
-        ContentTemplate="{DataTemplate views:LoginPage}"
-        Route="LoginPage" />
+    <!-- Grouping all 5 pages inside a TabBar enables seamless absolute '///' routing -->
+    <TabBar Shell.TabBarIsVisible="False">
 
+        <!-- 1. HOME / SEARCH TAB -->
+        <Tab Route="PGSearchPage">
+            <ShellContent ContentTemplate="{DataTemplate views:PGSearchPage}" />
+        </Tab>
+
+        <!-- 2. EXPLORE TAB -->
+        <Tab Route="ExplorePage">
+            <ShellContent ContentTemplate="{DataTemplate views:ExplorePage}" />
+        </Tab>
+
+        <!-- 3. BOOKINGS TAB -->
+        <Tab Route="MyBookingsPage">
+            <ShellContent ContentTemplate="{DataTemplate views:MyBookingsPage}" />
+        </Tab>
+
+        <!-- 4. WISHLIST TAB -->
+        <Tab Route="WishlistPage">
+            <ShellContent ContentTemplate="{DataTemplate views:WishlistPage}" />
+        </Tab>
+
+        <!-- 5. PROFILE TAB -->
+        <Tab Route="ProfilePage">
+            <ShellContent ContentTemplate="{DataTemplate views:ProfilePage}" />
+        </Tab>
+
+    </TabBar>
 </Shell>

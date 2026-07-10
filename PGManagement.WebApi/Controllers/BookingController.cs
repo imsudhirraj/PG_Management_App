@@ -33,6 +33,24 @@ public class BookingController : ControllerBase
     //}
 
     [Authorize(Roles = "Tenant")]
+    [HttpPost]
+    public async Task<IActionResult> Create(
+    [FromBody] CreateBookingRequest request)
+    {
+        var userId =
+            User.FindFirstValue(
+                ClaimTypes.NameIdentifier)!;
+
+        var id =
+            await _bookingRepository.CreateAsync(
+                userId,
+                request);
+
+        return Ok(new { id });
+    }
+
+
+    [Authorize(Roles = "Tenant")]
     [HttpGet("my-bookings")]
     public async Task<IActionResult> GetMyBookings()
     {
@@ -77,22 +95,4 @@ public class BookingController : ControllerBase
         var bookings = await _bookingRepository.GetByOwnerIdAsync(ownerId);
         return Ok(bookings);
     }
-
-    [Authorize(Roles = "Tenant")]
-    [HttpPost]
-    public async Task<IActionResult> Create(
-    [FromBody] CreateBookingRequest request)
-    {
-        var userId =
-            User.FindFirstValue(
-                ClaimTypes.NameIdentifier)!;
-
-        var id =
-            await _bookingRepository.CreateAsync(
-                userId,
-                request);
-
-        return Ok(new { id });
-    }
-
 }

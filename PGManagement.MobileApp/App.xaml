@@ -1,14 +1,13 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
-
 <Application
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:PGManagement.MobileApp.Helpers"
+    xmlns:app="clr-namespace:PGManagement.MobileApp"
     x:Class="PGManagement.MobileApp.App">
 
     <Application.Resources>
         <ResourceDictionary>
-
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
@@ -18,7 +17,93 @@
             <local:InvertedBoolConverter x:Key="InvertedBoolConverter" />
             <local:StatusColorConverter x:Key="StatusColorConverter" />
 
+            <app:WishlistColorConverter x:Key="WishlistColorConverter" />
+            <app:WishlistGlyphConverter x:Key="WishlistGlyphConverter" />
+            <app:EmptyCollectionToVisibleConverter x:Key="EmptyCollectionToVisibleConverter" />
+
+            <x:String x:Key="LucideFont">LucideIcons</x:String>
+
+            <x:String x:Key="IconHome">&#xe900;</x:String>
+            <x:String x:Key="IconSearch">&#xe901;</x:String>
+            <x:String x:Key="IconCalendar">&#xe902;</x:String>
+            <x:String x:Key="IconHeart">&#xe903;</x:String>
+            <x:String x:Key="IconUser">&#xe904;</x:String>
+
+            <ControlTemplate x:Key="GlobalJourneyTemplate">
+                <Grid BackgroundColor="#F8F9FA">
+                    <ContentPresenter />
+
+                    <Border VerticalOptions="End"
+                            HorizontalOptions="Fill"
+                            InputTransparent="False"
+                            ZIndex="999"
+                            Margin="20,0,20,15"
+                            Padding="4,2"
+                            HeightRequest="68"
+                            BackgroundColor="#F5EEF6"
+                            StrokeThickness="1"
+                            Stroke="#E2E8F0">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="34"/>
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="#1A0F172A" Offset="0,8" Radius="20"/>
+                        </Border.Shadow>
+
+                        <Grid ColumnDefinitions="*,*,*,*,*">
+                            <Grid Grid.Column="0">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavigateCommand, Source={x:Static Application.Current}}" CommandParameter="Home" />
+                                </Grid.GestureRecognizers>
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                                    <Path Data="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10" Stroke="#4A154B" StrokeThickness="2" StrokeLineCap="Round" StrokeLineJoin="Round" HorizontalOptions="Center" HeightRequest="25" WidthRequest="25"/>
+                                    <Label Text="Home" FontSize="10" FontAttributes="Bold" TextColor="#4A154B" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavigateCommand, Source={x:Static Application.Current}}" CommandParameter="Explore" />
+                                </Grid.GestureRecognizers>
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                                    <Path Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35" Stroke="#631D64" StrokeThickness="2" StrokeLineCap="Round" StrokeLineJoin="Round" HorizontalOptions="Center" HeightRequest="25" WidthRequest="25"/>
+                                    <Label Text="Explore" FontSize="10" FontAttributes="Bold" TextColor="#4A154B" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <Grid Grid.Column="2">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavigateCommand, Source={x:Static Application.Current}}" CommandParameter="Bookings" />
+                                </Grid.GestureRecognizers>
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                                    <Path Data="M19 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z M16 2v4 M8 2v4 M3 10h18" Stroke="#631D64" StrokeThickness="2" StrokeLineCap="Round" StrokeLineJoin="Round" HorizontalOptions="Center" HeightRequest="25" WidthRequest="25"/>
+                                    <Label Text="Bookings" FontSize="10" FontAttributes="Bold" TextColor="#4A154B" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <Grid Grid.Column="3">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavigateCommand, Source={x:Static Application.Current}}" CommandParameter="Wishlist" />
+                                </Grid.GestureRecognizers>
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                                    <Path Data="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" Stroke="#631D64" StrokeThickness="2" StrokeLineCap="Round" StrokeLineJoin="Round" HorizontalOptions="Center" HeightRequest="25" WidthRequest="25"/>
+                                    <Label Text="Wishlist" FontSize="10" FontAttributes="Bold" TextColor="#4A154B" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Grid>
+
+                            <Grid Grid.Column="4">
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding NavigateCommand, Source={x:Static Application.Current}}" CommandParameter="Profile" />
+                                </Grid.GestureRecognizers>
+                                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center" Spacing="4">
+                                    <Path Data="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2 M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z" Stroke="#631D64" StrokeThickness="2" StrokeLineCap="Round" StrokeLineJoin="Round" HorizontalOptions="Center" HeightRequest="25" WidthRequest="25"/>
+                                    <Label Text="Profile" FontSize="10" FontAttributes="Bold" TextColor="#4A154B" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </ControlTemplate>
         </ResourceDictionary>
     </Application.Resources>
-
 </Application>
