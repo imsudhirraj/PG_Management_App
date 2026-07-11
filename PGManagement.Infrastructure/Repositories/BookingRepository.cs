@@ -51,6 +51,7 @@ public class BookingRepository : IBookingRepository
             },
             commandType: CommandType.StoredProcedure);
     }
+
     public async Task<IEnumerable<BookingResponse>> GetByTenantIdAsync(int tenantId)
     {
         using var connection = _connectionFactory.CreateConnection();

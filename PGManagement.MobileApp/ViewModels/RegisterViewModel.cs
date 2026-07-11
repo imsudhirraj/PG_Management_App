@@ -1,10 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-//using IntelliJ.Lang.Annotations;
 using PGManagement.MobileApp.Services;
 
 namespace PGManagement.MobileApp.ViewModels;
 
+[QueryProperty(nameof(TargetRoute), "TargetRoute")]
 public partial class RegisterViewModel : ObservableObject
 {
     private readonly IAuthService _authService;
@@ -16,8 +16,15 @@ public partial class RegisterViewModel : ObservableObject
     [ObservableProperty] private string errorMessage = string.Empty;
     [ObservableProperty] private bool isBusy;
 
+    // Manually define the property to completely avoid source generator timing errors
+    private string _targetRoute = string.Empty;
+    public string TargetRoute
+    {
+        get => _targetRoute;
+        set => SetProperty(ref _targetRoute, value);
+    }
+
     public List<string> Roles { get; } = new() { "Tenant", "Owner" };
-    // SuperAdmin intentionally excluded — that role should be seeded/assigned manually, not self-registered
 
     public RegisterViewModel(IAuthService authService) => _authService = authService;
 
@@ -44,9 +51,21 @@ public partial class RegisterViewModel : ObservableObject
         }
 
         await Shell.Current.DisplayAlert("Success", "Account created. Please login.", "OK");
-        await Shell.Current.GoToAsync("//LoginPage");
+
+        string routeParam = !string.IsNullOrWhiteSpace(TargetRoute)
+            ? $"?TargetRoute={System.Uri.EscapeDataString(TargetRoute)}"
+            : string.Empty;
+
+        await Shell.Current.GoToAsync($"//LoginPage{routeParam}");
     }
 
     [RelayCommand]
-    private async Task GoToLoginAsync() => await Shell.Current.GoToAsync("//LoginPage");
+    private async Task GoToLoginAsync()
+    {
+        string routeParam = !string.IsNullOrWhiteSpace(TargetRoute)
+            ? $"?TargetRoute={System.Uri.EscapeDataString(TargetRoute)}"
+            : string.Empty;
+
+        await Shell.Current.GoToAsync($"//LoginPage{routeParam}");
+    }
 }

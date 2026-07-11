@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PGManagement.Application.DTOs;
 using PGManagement.Application.Interfaces;
+using PGManagement.Domain.Entities;
 
 namespace PGManagement.WebApi.Controllers;
 
@@ -16,8 +17,25 @@ public class RoomController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreateRoomRequest request)
     {
-        var id = await _roomRepository.CreateAsync(request);
-        return CreatedAtAction(nameof(GetByPGId), new { pgId = request.PGId }, new { id });
+        var room = new Room
+        {
+            PGId = request.PGId,
+            RoomNumber = request.RoomNumber,
+            RoomType = request.RoomType,
+            Floor = request.Floor,
+            TotalBeds = request.TotalBeds,
+            RentAmount = request.RentAmount,
+            SecurityDeposit = request.SecurityDeposit,
+            Description = request.Description,
+            Status = request.Status
+        };
+
+        var id = await _roomRepository.CreateAsync(room);
+
+        return CreatedAtAction(
+            nameof(GetByPGId),
+            new { pgId = request.PGId },
+            new { id });
     }
 
     [AllowAnonymous]

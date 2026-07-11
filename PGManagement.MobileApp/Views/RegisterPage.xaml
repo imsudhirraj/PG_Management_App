@@ -42,7 +42,7 @@
 
             <VerticalStackLayout Spacing="12" Margin="0,16,0,0">
                 <Button Text="Complete Profile Registration" Command="{Binding RegisterCommand}" IsEnabled="{Binding IsBusy, Converter={StaticResource InvertedBoolConverter}}"
-                        BackgroundColor="#512BD4" TextColor="White" HeightRequest="52" CornerRadius="12" FontAttributes="Bold" FontSize="16"/>
+                        BackgroundColor="#4A154B" TextColor="White" HeightRequest="52" CornerRadius="12" FontAttributes="Bold" FontSize="16"/>
 
                 <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}" Color="#512BD4" HorizontalOptions="Center"/>
 

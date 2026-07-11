@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using PGManagement.MobileApp.Models;
 using PGManagement.MobileApp.Services;
+using System.Collections.ObjectModel;
 
 namespace PGManagement.MobileApp.ViewModels;
 
@@ -21,6 +22,17 @@ public partial class PGDetailViewModel : ObservableObject
     [ObservableProperty] private string statusMessage = string.Empty;
     [ObservableProperty] private bool isEditing;
 
+    public ObservableCollection<ReviewResponse> Reviews { get; } = new();
+
+    [ObservableProperty]
+    private bool isFavourite;
+
+    [ObservableProperty]
+    private decimal rating;
+
+    [ObservableProperty]
+    private int reviewCount;
+
     public PGDetailViewModel(IApiService apiService) => _apiService = apiService;
 
     partial void OnPgIdChanged(int value) => _ = LoadAsync();
@@ -35,6 +47,10 @@ public partial class PGDetailViewModel : ObservableObject
             Name = pg.Name; Address = pg.Address; City = pg.City;
             Description = pg.Description ?? string.Empty;
             Latitude = pg.Latitude; Longitude = pg.Longitude;
+
+            await LoadReviewsAsync();
+
+            await _apiService.AddRecentlyViewedAsync(PgId);
         }
         catch (Exception ex)
         {
@@ -95,6 +111,55 @@ public partial class PGDetailViewModel : ObservableObject
             }
         }
         finally { IsBusy = false; }
+    }
+
+    [RelayCommand]
+    private async Task LoadReviewsAsync()
+    {
+        Reviews.Clear();
+
+        var reviews =
+            await _apiService.GetReviewsAsync(PgId);
+
+        if (reviews == null)
+            return;
+
+        foreach (var review in reviews)
+            Reviews.Add(review);
+    }
+
+    [RelayCommand]
+    private async Task ToggleFavouriteAsync()
+    {
+        if (IsFavourite)
+        {
+            await _apiService.RemoveFavouriteAsync(PgId);
+
+            IsFavourite = false;
+        }
+        else
+        {
+            await _apiService.AddFavouriteAsync(PgId);
+
+            IsFavourite = true;
+        }
+    }
+
+    [RelayCommand]
+    private async Task SubmitReviewAsync()
+    {
+        var request = new CreateReviewRequest
+        {
+            PGId = PgId,
+            Rating = Rating,
+            ReviewText = Description
+        };
+
+        var success =
+            await _apiService.CreateReviewAsync(request);
+
+        if (success)
+            await LoadReviewsAsync();
     }
 
 }

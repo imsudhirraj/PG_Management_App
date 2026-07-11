@@ -43,7 +43,25 @@ public class PGController : ControllerBase
             City = request.City,
             Description = request.Description,
             Latitude = request.Latitude,
-            Longitude = request.Longitude
+            Longitude = request.Longitude,
+
+            PropertyType = request.PropertyType,
+
+            GenderType = request.GenderType,
+
+            DepositAmount = request.DepositAmount,
+
+            FoodAvailable = request.FoodAvailable,
+
+            WifiAvailable = request.WifiAvailable,
+
+            LaundryAvailable = request.LaundryAvailable,
+
+            ParkingAvailable = request.ParkingAvailable,
+
+            ACAvailable = request.ACAvailable,
+
+            CoverImageUrl = request.CoverImageUrl
         };
 
         var id = await _pgRepository.CreateAsync(pg);
@@ -70,16 +88,28 @@ public class PGController : ControllerBase
     [HttpGet("{id}")]
     public async Task<IActionResult> GetById(int id)
     {
-        var pg = await _pgRepository.GetByIdAsync(id);
-        return pg is null ? NotFound() : Ok(pg);
+        var pg =
+            await _pgRepository.GetByIdAsync(id);
+
+        if (pg == null)
+            return NotFound();
+
+        return Ok(pg);
     }
 
     [AllowAnonymous]
     [HttpGet("search")]
     public async Task<IActionResult> SearchByLocation(
-        [FromQuery] decimal lat, [FromQuery] decimal lng, [FromQuery] double radiusKm = 5)
+    [FromQuery] decimal lat,
+    [FromQuery] decimal lng,
+    [FromQuery] double radiusKm = 5)
     {
-        var results = await _pgRepository.SearchByLocationAsync(lat, lng, radiusKm);
+        var results =
+            await _pgRepository.SearchByLocationAsync(
+                lat,
+                lng,
+                radiusKm);
+
         return Ok(results);
     }
 
@@ -90,5 +120,87 @@ public class PGController : ControllerBase
         var ownerId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         var pgs = await _pgRepository.GetByOwnerIdAsync(ownerId);
         return Ok(pgs);
+    }
+
+    [AllowAnonymous]
+    [HttpGet("home")]
+    public async Task<IActionResult> GetHomeData(
+    [FromQuery] decimal lat,
+    [FromQuery] decimal lng)
+    {
+        var nearby =
+            await _pgRepository.SearchByLocationAsync(lat, lng, 5);
+
+        return Ok(new
+        {
+            Featured = nearby.Where(x => x.Featured).Take(10),
+
+            Nearby = nearby.Take(20),
+
+            Recommended = nearby
+                .OrderByDescending(x => x.Rating)
+                .Take(10),
+
+            RecentlyAdded = nearby
+                .OrderByDescending(x => x.Id)
+                .Take(10)
+        });
+    }
+
+    [AllowAnonymous]
+    [HttpGet("filters")]
+    public IActionResult GetFilters()
+    {
+        return Ok(new
+        {
+            PropertyTypes = new[]
+            {
+            "PG",
+            "Hostel",
+            "CoLiving"
+        },
+
+            GenderTypes = new[]
+            {
+            "Boys",
+            "Girls",
+            "Unisex"
+        },
+
+            Amenities = new[]
+            {
+            "WiFi",
+            "Food",
+            "Laundry",
+            "Parking",
+            "AC"
+        }
+        });
+    }
+
+    [AllowAnonymous]
+    [HttpGet("featured")]
+    public async Task<IActionResult> Featured(
+    [FromQuery] decimal lat,
+    [FromQuery] decimal lng)
+    {
+        var result =
+            await _pgRepository.SearchByLocationAsync(lat, lng, 10);
+
+        return Ok(
+            result.Where(x => x.Featured));
+    }
+
+    [AllowAnonymous]
+    [HttpGet("search-by-text")]
+    public async Task<IActionResult> Search([FromQuery] string query)
+    {
+        if (string.IsNullOrWhiteSpace(query))
+            return Ok(new List<PGCardResponse>());
+
+        var results = await _pgRepository.SearchPGsAsync(query);
+        return Ok(results);
+        //return Ok(new { Count = results.Count(), Query = query, Results = results });
+
     }
 }

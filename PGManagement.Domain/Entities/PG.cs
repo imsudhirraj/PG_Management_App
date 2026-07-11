@@ -12,6 +12,27 @@ public class PG : BaseEntity
     public decimal Latitude { get; set; }
     public decimal Longitude { get; set; }
 
+    public string PropertyType { get; set; } = "PG";
+
+    public string GenderType { get; set; } = "Unisex";
+
+    public decimal DepositAmount { get; set; }
+
+    public bool FoodAvailable { get; set; }
+
+    public bool WifiAvailable { get; set; }
+
+    public bool LaundryAvailable { get; set; }
+
+    public bool ParkingAvailable { get; set; }
+
+    public bool ACAvailable { get; set; }
+
+    public string? CoverImageUrl { get; set; }
+    public bool Featured { get; set; }
+
+    public bool Verified { get; set; }
+
     public ICollection<Room> Rooms { get; set; } = new List<Room>();
     public ICollection<PGImage> Images { get; set; } = new List<PGImage>();
     public ICollection<PGAmenity> Amenities { get; set; } = new List<PGAmenity>();
