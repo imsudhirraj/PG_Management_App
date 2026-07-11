@@ -106,39 +106,44 @@
 
                         <VerticalStackLayout Spacing="16">
                             <Label Text="Search Nearby PGs" FontSize="18" FontAttributes="Bold" TextColor="#1F1F1F"/>
-
+                            <Label Text="{Binding StatusMessage}"
+       FontSize="12"
+       TextColor="#495057"
+       IsVisible="{Binding StatusMessage, Converter={StaticResource StringNotEmptyConverter}}"
+       Margin="0,-8,0,0"/>
                             <Border Padding="14,4" BackgroundColor="White" Stroke="#E2CCD3" StrokeThickness="1">
                                 <Border.StrokeShape>
                                     <RoundRectangle CornerRadius="12"/>
                                 </Border.StrokeShape>
                                 <Grid ColumnDefinitions="Auto,*">
-                                    <Path Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35" 
-                                          Stroke="#4A154B" 
-                                          StrokeThickness="2" 
-                                          StrokeLineCap="Round" 
-                                          StrokeLineJoin="Round" 
-                                          Aspect="Uniform"
-                                          HeightRequest="18" 
-                                          WidthRequest="18" 
-                                          VerticalOptions="Center" 
-                                          Margin="2,0,0,0"/>
+                                    <Path Data="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z M21 21l-4.35-4.35"
+                  Stroke="#4A154B"
+                  StrokeThickness="2"
+                  StrokeLineCap="Round"
+                  StrokeLineJoin="Round"
+                  Aspect="Uniform"
+                  HeightRequest="18"
+                  WidthRequest="18"
+                  VerticalOptions="Center"
+                  Margin="2,0,0,0"/>
                                     <Entry Grid.Column="1" Margin="10,0,0,0" Placeholder="Where you are planing to stay at.." PlaceholderColor="#A3849E" Text="{Binding SearchText}" BackgroundColor="Transparent" TextColor="#2D0B30" FontSize="14"/>
                                 </Grid>
                             </Border>
 
+                            <!-- Row 1: Current Location + Locate button -->
                             <Grid ColumnDefinitions="Auto,*,Auto" VerticalOptions="Center">
                                 <Border WidthRequest="36" HeightRequest="36" BackgroundColor="#F5EEF6" StrokeThickness="0" Padding="8">
                                     <Border.StrokeShape>
                                         <RoundRectangle CornerRadius="8"/>
                                     </Border.StrokeShape>
-                                    <Path Data="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z" 
-                                          Stroke="#4A154B" 
-                                          StrokeThickness="2" 
-                                          StrokeLineCap="Round" 
-                                          StrokeLineJoin="Round" 
-                                          Aspect="Uniform"
-                                          HorizontalOptions="Center" 
-                                          VerticalOptions="Center"/>
+                                    <Path Data="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z M12 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+                  Stroke="#4A154B"
+                  StrokeThickness="2"
+                  StrokeLineCap="Round"
+                  StrokeLineJoin="Round"
+                  Aspect="Uniform"
+                  HorizontalOptions="Center"
+                  VerticalOptions="Center"/>
                                 </Border>
 
                                 <VerticalStackLayout Grid.Column="1" Margin="12,0" VerticalOptions="Center">
@@ -147,7 +152,37 @@
                                 <Button Grid.Column="2" Text="Locate" Padding="14,0" HeightRequest="32" CornerRadius="8" BackgroundColor="#4A154B" TextColor="White" FontAttributes="Bold" FontSize="12" Command="{Binding LocateMeCommand}"/>
                             </Grid>
 
-                            <Button x:Name="SearchPropertiesButton" HeightRequest="48" CornerRadius="12" FontAttributes="Bold" FontSize="15" Text="Search Properties" Command="{Binding SearchNearbyCommand}" BackgroundColor="#4A154B" TextColor="White"/>
+                            <!-- Row 2: Radius slider — sibling of Row 1, NOT nested inside it -->
+                            <Grid ColumnDefinitions="Auto,*,Auto"
+      VerticalOptions="Center">
+
+                                <Label Text="Radius"
+           FontAttributes="Bold"
+           FontSize="13"
+           TextColor="#495057"
+           VerticalOptions="Center" />
+
+                                <Slider Grid.Column="1"
+            Margin="10,0"
+            Minimum="1"
+            Maximum="50"
+            Value="{Binding RadiusKm, Mode=TwoWay}"
+            MinimumTrackColor="#4A154B"
+            MaximumTrackColor="#E2CCD3"
+            ThumbColor="#4A154B" />
+
+                                <Label Grid.Column="2"
+           Text="{Binding RadiusKm, StringFormat='{0:0} km'}"
+           FontAttributes="Bold"
+           FontSize="13"
+           TextColor="#4A154B"
+           VerticalOptions="Center"
+           WidthRequest="55"
+           HorizontalTextAlignment="End"/>
+
+                            </Grid>
+
+                            <Button x:Name="SearchPropertiesButton" HeightRequest="48" CornerRadius="12" FontAttributes="Bold" FontSize="15" Text="Search PGs" Command="{Binding SearchNearbyCommand}" BackgroundColor="#4A154B" TextColor="White"/>
                         </VerticalStackLayout>
                     </Border>
 

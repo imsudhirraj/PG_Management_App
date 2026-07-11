@@ -130,148 +130,167 @@ public partial class PGSearchViewModel : ObservableObject
     {
         bool hasSearchText = !string.IsNullOrWhiteSpace(SearchText);
 
-        // Invalidate the cache on ANY mode switch (text <-> GPS), not just
-        // when entering text mode. This is what previously let stale
-        // text-search results (no rent/beds data, wrong distance) leak into
-        // a GPS-nearby result set after a Singleton ViewModel had already
-        // done at least one text search earlier in the app's lifetime.
-        if (_cacheIsFromTextSearch.HasValue && _cacheIsFromTextSearch.Value != hasSearchText)
-        {
-            _rawNearbyCache.Clear();
-        }
-
-        if (hasSearchText) _rawNearbyCache.Clear();
-
-        if (!_rawNearbyCache.Any())
-        {
-            StatusMessage = hasSearchText ? "Searching..." : "Searching nearby PGs...";
-            try
-            {
-                if (hasSearchText)
-                {
-                    var searchResults = await _apiService.SearchPGsByNameAsync(SearchText.Trim());
-                    _rawNearbyCache = searchResults?.ToList() ?? new List<PGCardResponse>();
-                    _cacheIsFromTextSearch = true;
-
-                    // A text search has no associated GPS point — clear any
-                    // stale coordinates so a later GPS-mode fetch can't
-                    // accidentally reuse a leftover value if something goes
-                    // wrong before it's reassigned below.
-                    UserLatitude = null;
-                    UserLongitude = null;
-                }
-                else
-                {
-                    var location = await GetCurrentLocationAsync(allowLocationPrompt);
-                    if (location == null)
-                    {
-                        // Silent, non-alarming state when we deliberately
-                        // didn't prompt (e.g. page load with no prior
-                        // permission grant) — the "Locate" button remains
-                        // available for the user to opt in explicitly.
-                        StatusMessage = allowLocationPrompt
-                            ? "Unable to get your location."
-                            : "Tap Locate to find PGs near you.";
-                        return;
-                    }
-
-                    UserLatitude = location.Latitude;
-                    UserLongitude = location.Longitude;
-
-                    var nearby = await _apiService.GetNearbyPGsAsync((decimal)location.Latitude, (decimal)location.Longitude, RadiusKm);
-                    _rawNearbyCache = nearby?.ToList() ?? new List<PGCardResponse>();
-                    _cacheIsFromTextSearch = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = ex.Message;
-                // Only surface an alert dialog for prompt-allowed (explicit
-                // user-initiated) flows — a silent background attempt on
-                // page load shouldn't pop an alert.
-                if (allowLocationPrompt && Shell.Current?.CurrentPage != null)
-                    await Shell.Current.DisplayAlert("Search Failed", ex.Message, "OK");
-                return;
-            }
-        }
-
         NearbyPGs.Clear();
 
-        if (!_rawNearbyCache.Any())
+        try
         {
-            StatusMessage = "No PGs found.";
-            return;
-        }
-
-        var centerLocation = new Location(UserLatitude ?? 0, UserLongitude ?? 0);
-
-        var processingTasks = _rawNearbyCache.Select(async x =>
-        {
-            try
+            // ==========================================================
+            // TEXT SEARCH (City/Name)
+            // ==========================================================
+            if (hasSearchText)
             {
-                // Only geocode items truly missing coordinates. Cache the
-                // result on the item itself so a repeat search (e.g. category
-                // filter tap) never re-geocodes the same PG twice.
-                if (Convert.ToDouble(x.Latitude) == 0 && Convert.ToDouble(x.Longitude) == 0)
+                StatusMessage = "Searching...";
+
+                var searchResults = await _apiService.SearchPGsByNameAsync(SearchText.Trim());
+
+                var filteredList = searchResults?.AsEnumerable() ?? Enumerable.Empty<PGCardResponse>();
+
+                // Apply category filter
+                var selectedChip = Categories.FirstOrDefault(c => c.IsSelected);
+                if (selectedChip != null && selectedChip.Name != "All")
                 {
-                    string targetAddress = !string.IsNullOrWhiteSpace(x.Address) ? x.Address : x.City;
-                    if (!string.IsNullOrWhiteSpace(targetAddress))
+                    filteredList = filteredList.Where(x => selectedChip.Name switch
                     {
-                        var locations = await Geocoding.Default.GetLocationsAsync(targetAddress);
-                        var foundLocation = locations?.FirstOrDefault();
-                        if (foundLocation != null)
-                        {
-                            x.Latitude = foundLocation.Latitude;
-                            x.Longitude = foundLocation.Longitude;
-                        }
+                        "Boys" => x.GenderType?.Equals("Boys", StringComparison.OrdinalIgnoreCase) == true,
+                        "Girls" => x.GenderType?.Equals("Girls", StringComparison.OrdinalIgnoreCase) == true,
+                        "Family" => x.GenderType?.Equals("Family", StringComparison.OrdinalIgnoreCase) == true,
+                        "AC" => x.PropertyType?.Contains("AC", StringComparison.OrdinalIgnoreCase) == true,
+                        "Food" => x.PropertyType?.Contains("Food", StringComparison.OrdinalIgnoreCase) == true,
+                        "WiFi" => x.PropertyType?.Contains("WiFi", StringComparison.OrdinalIgnoreCase) == true,
+                        "Parking" => x.PropertyType?.Contains("Parking", StringComparison.OrdinalIgnoreCase) == true,
+                        _ => true
+                    });
+                }
+
+                foreach (var item in filteredList)
+                {
+                    item.DistanceKm = 0;   // Distance not applicable for text search
+                    NearbyPGs.Add(item);
+                }
+
+                StatusMessage = $"{NearbyPGs.Count} PG(s) found matching criteria.";
+                return;
+            }
+
+            // ==========================================================
+            // GPS + RADIUS SEARCH
+            // ==========================================================
+
+            StatusMessage = "Searching nearby PGs...";
+
+            var location = await GetCurrentLocationAsync(allowLocationPrompt);
+
+            if (location == null)
+            {
+                StatusMessage = allowLocationPrompt
+                    ? "Unable to get your location."
+                    : "Tap Locate to find nearby PGs.";
+                return;
+            }
+
+            UserLatitude = location.Latitude;
+            UserLongitude = location.Longitude;
+
+            var nearbyResults = await _apiService.GetNearbyPGsAsync(
+                (decimal)location.Latitude,
+                (decimal)location.Longitude,
+                RadiusKm);
+
+            if (nearbyResults == null || !nearbyResults.Any())
+            {
+                StatusMessage = "No PGs found matching criteria.";
+                return;
+            }
+
+            var center = new Location(location.Latitude, location.Longitude);
+
+            foreach (var pg in nearbyResults)
+            {
+                try
+                {
+                    if (Convert.ToDouble(pg.Latitude) != 0 &&
+                        Convert.ToDouble(pg.Longitude) != 0)
+                    {
+                        pg.DistanceKm = Location.CalculateDistance(
+                            center,
+                            new Location(
+                                Convert.ToDouble(pg.Latitude),
+                                Convert.ToDouble(pg.Longitude)),
+                            DistanceUnits.Kilometers);
                     }
                 }
-
-                double pgLat = Convert.ToDouble(x.Latitude);
-                double pgLng = Convert.ToDouble(x.Longitude);
-
-                if (centerLocation.Longitude < 0 && pgLng > 0 && Math.Abs(centerLocation.Longitude - (-pgLng)) < 1)
+                catch
                 {
-                    pgLng = -pgLng;
-                    x.Longitude = pgLng;
+                    // Ignore distance calculation failures
                 }
-
-                var pgLocation = new Location(pgLat, pgLng);
-                x.DistanceKm = Location.CalculateDistance(centerLocation, pgLocation, DistanceUnits.Kilometers);
-                return x;
             }
-            catch { return x; }
-        });
 
-        var processedResults = await Task.WhenAll(processingTasks);
+            IEnumerable<PGCardResponse> finalList =
+                nearbyResults.Where(x => x.DistanceKm <= RadiusKm || x.DistanceKm == 0);
 
-        IEnumerable<PGCardResponse> filteredList = hasSearchText
-            ? processedResults
-            : processedResults.Where(x => x.DistanceKm <= RadiusKm || x.DistanceKm == 0);
+            // Apply category filter
+            var chip = Categories.FirstOrDefault(c => c.IsSelected);
 
-        var selectedChip = Categories.FirstOrDefault(c => c.IsSelected);
-        if (selectedChip != null && selectedChip.Name != "All")
-        {
-            filteredList = filteredList.Where(x => selectedChip.Name switch
+            if (chip != null && chip.Name != "All")
             {
-                "Boys" => x.GenderType != null && x.GenderType.Equals("Boys", StringComparison.OrdinalIgnoreCase),
-                "Girls" => x.GenderType != null && x.GenderType.Equals("Girls", StringComparison.OrdinalIgnoreCase),
-                "Family" => x.GenderType != null && x.GenderType.Equals("Family", StringComparison.OrdinalIgnoreCase),
-                "AC" => x.PropertyType != null && x.PropertyType.Contains("AC", StringComparison.OrdinalIgnoreCase),
-                "Food" => x.PropertyType != null && x.PropertyType.Contains("Food", StringComparison.OrdinalIgnoreCase),
-                "WiFi" => x.PropertyType != null && x.PropertyType.Contains("WiFi", StringComparison.OrdinalIgnoreCase),
-                "Parking" => x.PropertyType != null && x.PropertyType.Contains("Parking", StringComparison.OrdinalIgnoreCase),
-                _ => true
-            });
-        }
+                finalList = finalList.Where(x => chip.Name switch
+                {
+                    "Boys" => x.GenderType?.Equals("Boys", StringComparison.OrdinalIgnoreCase) == true,
+                    "Girls" => x.GenderType?.Equals("Girls", StringComparison.OrdinalIgnoreCase) == true,
+                    "Family" => x.GenderType?.Equals("Family", StringComparison.OrdinalIgnoreCase) == true,
+                    "AC" => x.PropertyType?.Contains("AC", StringComparison.OrdinalIgnoreCase) == true,
+                    "Food" => x.PropertyType?.Contains("Food", StringComparison.OrdinalIgnoreCase) == true,
+                    "WiFi" => x.PropertyType?.Contains("WiFi", StringComparison.OrdinalIgnoreCase) == true,
+                    "Parking" => x.PropertyType?.Contains("Parking", StringComparison.OrdinalIgnoreCase) == true,
+                    _ => true
+                });
+            }
 
-        foreach (var item in filteredList)
+            foreach (var item in finalList)
+            {
+                NearbyPGs.Add(item);
+            }
+
+            StatusMessage = $"{NearbyPGs.Count} PG(s) found matching criteria.";
+        }
+        catch (Exception ex)
         {
-            NearbyPGs.Add(item);
-        }
+            StatusMessage = ex.Message;
 
-        StatusMessage = $"{NearbyPGs.Count} PG(s) found matching criteria.";
+            if (allowLocationPrompt && Shell.Current?.CurrentPage != null)
+            {
+                await Shell.Current.DisplayAlert(
+                    "Search Failed",
+                    ex.Message,
+                    "OK");
+            }
+        }
     }
+
+    //[RelayCommand]
+    //private async Task RadiusChangedAsync()
+    //{
+    //    if (_isSearching || IsBusy) return;
+    //    if (!string.IsNullOrWhiteSpace(SearchText)) return; // radius is meaningless for a text search
+    //    if (!UserLatitude.HasValue || !UserLongitude.HasValue) return; // no location yet — nothing to re-run
+
+    //    _isSearching = true;
+    //    IsBusy = true;
+    //    try
+    //    {
+    //        // Force a fresh server fetch at the new radius rather than
+    //        // re-filtering the old cached result set, since a wider radius
+    //        // can include PGs the previous fetch never returned at all.
+    //        _rawNearbyCache.Clear();
+    //        _cacheIsFromTextSearch = null;
+    //        await SearchNearbyInternalAsync(allowLocationPrompt: false);
+    //    }
+    //    finally
+    //    {
+    //        _isSearching = false;
+    //        IsBusy = false;
+    //    }
+    //}
 
     // Bound to the "Locate" button. This — and only this, plus the
     // Search Properties button / category filters — is allowed to trigger
